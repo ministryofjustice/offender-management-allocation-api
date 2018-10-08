@@ -1,5 +1,10 @@
 class StatusController < ApplicationController
   def index
-    render(json: { status: 'ok' })
+    postgres_version = ActiveRecord::Base.connection.select_value('SELECT version()')
+
+    render(json: { 
+      'status' => 'ok',
+      'postgresVersion' => postgres_version
+    })
   end
 end
