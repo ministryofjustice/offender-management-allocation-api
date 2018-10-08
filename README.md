@@ -1,24 +1,11 @@
-# README
+# Offender Management Allocation API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Start the application
 
-Things you may want to cover:
+```
+$ rails s
+```
 
-* Ruby version
+### Check application status
+Visit `localhost:3000/status`
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
