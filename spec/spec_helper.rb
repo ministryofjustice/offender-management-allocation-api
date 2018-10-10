@@ -3,7 +3,6 @@ SimpleCov.minimum_coverage 100
 
 SimpleCov.start 'rails' do
   add_filter '/gems'
-  add_filter 'app/models/application_record.rb'
 end
 
 if ENV['CIRCLE_ARTIFACTS']
