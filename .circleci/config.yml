@@ -1,0 +1,56 @@
+version: 2
+jobs:
+  build:
+    parallelism: 1
+    working_directory: ~/offender-management-allocation-api
+    docker:
+      - image: circleci/ruby:2.5.1-node-browsers
+        environment:
+          RAILS_ENV: test
+          PG_HOST: 127.0.0.1
+          PG_USER: ubuntu
+          RACK_ENV: test
+          DATABASE_URL: "postgres://ubuntu@localhost/allocation-api_test"
+      - image: circleci/postgres:10.5-alpine
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: allocation-api_test
+    steps:
+      - checkout
+      - run:
+          name: Which bundler?
+          command: bundle -v
+      - restore_cache:
+          keys:
+            - offender-management-allocation-api-v1-{{ checksum "Gemfile.lock" }}
+            - offender-management-allocation-api-v1-
+      - run: gem install did_you_mean -v 1.2.1
+      - run: bundle check --path vendor/bundle || bundle install --path vendor/bundle
+      - save_cache:
+          key: offender-management-allocation-api-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      # - run:
+      #     name: wait for db
+      #     command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: 
+          name: Setup db
+          command: |
+            bundle exec rake db:create db:schema:load --trace
+            bundle exec rake db:migrate
+      - run:
+          name: Run tests
+          command: |
+            ./cc-test-reporter before-build
+            bundle exec rake
+            ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
+      - store_test_results:
+          path: coverage
+      - store_artifacts:
+          path: coverage
