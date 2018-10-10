@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: offender-management-allocation-api_production
-  username: offender-management-allocation-api
+  database: <%= ENV['DATABASE_NAME'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
