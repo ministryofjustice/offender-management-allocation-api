@@ -1,13 +1,13 @@
 require 'simplecov'
 SimpleCov.minimum_coverage 100
 
+SimpleCov.start 'rails' do
+  add_filter '/gems'
+end
+
 if ENV['CIRCLE_ARTIFACTS']
   dir = File.join(ENV['CIRCLE_ARTIFACTS'], "coverage")
   SimpleCov.coverage_dir(dir)
-
-  SimpleCov.start 'rails' do
-    add_filter '/gems'
-  end
 end
 
 RSpec.configure do |config|
