@@ -1,0 +1,75 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: allocation-api
+  labels:
+    app: allocation-api
+spec:
+  replicas: 3
+  revisionHistoryLimit: 2
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 2
+  selector:
+    matchLabels:
+      app: allocation-api
+  template:
+    metadata:
+      labels:
+        app: allocation-api
+    spec:
+      containers:
+        - name: allocation-api
+          image:
+            valueFrom:
+              secretKeyRef:
+                name: offender-management-allocation-api
+                key: repo_url
+          imagePullPolicy: Always
+          command: ['sh', '-c', "bundle exec rails s -p 3000 -b '0.0.0.0' -P /tmp/server.pid"]
+          ports:
+            - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+              initialDelaySeconds: 10
+              periodSeconds: 60
+          env:
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-api-secrets
+                  key: secret_key_base
+            - name: RAILS_SERVE_STATIC_FILES
+              value: "true"
+            - name: RAILS_ENV
+              value: "production"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-rds-instance-output
+                  key: rds_instance_endpoint
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-rds-instance-output
+                  key: database_password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-rds-instance-output
+                  key: database_name
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-rds-instance-output
+                  key: database_username
