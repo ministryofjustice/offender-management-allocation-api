@@ -82,4 +82,4 @@ production:
   <<: *default
   database: offender-management-allocation-api_production
   username: offender-management-allocation-api
-  password: <%= ENV['OFFENDER-MANAGEMENT-ALLOCATION-API_DATABASE_PASSWORD'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
