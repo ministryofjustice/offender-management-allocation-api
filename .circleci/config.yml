@@ -28,7 +28,6 @@ jobs:
           keys:
             - offender-management-allocation-api-v1-{{ checksum "Gemfile.lock" }}
             - offender-management-allocation-api-v1-
-      - run: gem install did_you_mean -v 1.2.1
       - run: bundle check --path vendor/bundle || bundle install --path vendor/bundle
       - save_cache:
           key: offender-management-allocation-api-v1-{{ checksum "Gemfile.lock" }}
