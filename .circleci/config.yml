@@ -1,22 +1,26 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/ruby:2.5.1-node-browsers
+      environment:
+        RAILS_ENV: test
+        PG_HOST: 127.0.0.1
+        PG_USER: ubuntu
+        RACK_ENV: test
+    - image: circleci/postgres:10.5-alpine
+      environment:
+        POSTGRES_USER: ubuntu
+        POSTGRES_PASSWORD: ""
+        POSTGRES_DB: allocation-api_test
+
 version: 2
 jobs:
-  build:
-    parallelism: 1
-    working_directory: ~/offender-management-allocation-api
-    docker:
-      - image: circleci/ruby:2.5.1-node-browsers
-        environment:
-          RAILS_ENV: test
-          PG_HOST: 127.0.0.1
-          PG_USER: ubuntu
-          RACK_ENV: test
-      - image: circleci/postgres:10.5-alpine
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: allocation-api_test
+  bundle_dependencies:
+    <<: *defaults
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Which bundler?
           command: bundle -v
@@ -29,24 +33,43 @@ jobs:
       - save_cache:
           key: offender-management-allocation-api-v1-{{ checksum "Gemfile.lock" }}
           paths:
-            - vendor/bundle
+            - ~/repo/vendor/bundle
+      - persist_to_workspace:
+          root: .
+          paths: vendor/bundle
       - run:
-          name: Setup Code Climate test-reporter
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-      - run: 
-          name: Setup db
+          name: Migrate database
           command: |
             bundle exec rake db:create db:schema:load --trace
             bundle exec rake db:migrate
+
+  run_tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - run: bundle --path vendor/bundle
       - run:
-          name: Run tests
+          name: Download Code Climate
           command: |
-            ./cc-test-reporter before-build
-            bundle exec rake
-            ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run: |
+          ./cc-test-reporter before-build
+          bundle exec rake
+          ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
       - store_test_results:
           path: coverage
       - store_artifacts:
           path: coverage
+
+workflows:
+  version: 2
+  build_and_test_workflow:
+    jobs:
+      - bundle_dependencies
+      - run_tests:
+          requires:
+            - bundle_dependencies
+
