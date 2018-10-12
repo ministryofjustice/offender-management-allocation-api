@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/ruby:2.5.1-node-browsers
+    - image: circleci/ruby:2.5.1
       environment:
         RAILS_ENV: test
         PG_HOST: 127.0.0.1
@@ -26,11 +26,11 @@ jobs:
           command: bundle -v
       - restore_cache:
           keys:
-            - offender-management-allocation-api-v1-{{ checksum "Gemfile.lock" }}
-            - offender-management-allocation-api-v1-
+            - allocation-api-v1-{{ checksum "Gemfile.lock" }}
+            - allocation-api-v1-
       - run: bundle check --path vendor/bundle || bundle install --path vendor/bundle
       - save_cache:
-          key: offender-management-allocation-api-v1-{{ checksum "Gemfile.lock" }}
+          key: allocation-api-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - ~/repo/vendor/bundle
       - persist_to_workspace:
