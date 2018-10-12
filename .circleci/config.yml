@@ -1,22 +1,28 @@
+ruby_image: &ruby_image
+  image: circleci/ruby:2.5.1
+  environment:
+    RAILS_ENV: test
+    PG_HOST: 127.0.0.1
+    PG_USER: ubuntu
+    RACK_ENV: test
+
+postgres_image: &postgres_image
+  image: circleci/postgres:10.5-alpine
+  environment:
+    POSTGRES_USER: ubuntu
+    POSTGRES_PASSWORD: ""
+    POSTGRES_DB: allocation-api_test
+
 defaults: &defaults
   working_directory: ~/repo
-  docker:
-    - image: circleci/ruby:2.5.1
-      environment:
-        RAILS_ENV: test
-        PG_HOST: 127.0.0.1
-        PG_USER: ubuntu
-        RACK_ENV: test
-    - image: circleci/postgres:10.5-alpine
-      environment:
-        POSTGRES_USER: ubuntu
-        POSTGRES_PASSWORD: ""
-        POSTGRES_DB: allocation-api_test
 
 version: 2
 jobs:
   build:
     <<: *defaults
+    docker:
+      - <<: *ruby_image
+      - <<: *postgres_image
     steps:
       - checkout
       - attach_workspace:
@@ -44,6 +50,9 @@ jobs:
 
   test:
     <<: *defaults
+    docker:
+      - <<: *ruby_image
+      - <<: *postgres_image
     steps:
       - checkout
       - attach_workspace:
@@ -65,6 +74,8 @@ jobs:
 
   security-static-analysis:
     <<: *defaults
+    docker:
+      - <<: *ruby_image
     steps:
       - checkout
       - attach_workspace:
