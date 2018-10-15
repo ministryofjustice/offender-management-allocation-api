@@ -32,7 +32,7 @@ spec:
                 name: offender-management-allocation-api
                 key: repo_url
           imagePullPolicy: Always
-          command: ['sh', '-c', "bundle exec rails s -p 3000 -b '0.0.0.0' -P /tmp/server.pid"]
+          command: ['sh', '-c', "bundle exec rails s -p 3000 -b '0.0.0.0' -c config/puma_prod.rb -P /tmp/server.pid"]
           ports:
             - containerPort: 3000
           livenessProbe:
