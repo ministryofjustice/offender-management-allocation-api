@@ -26,3 +26,4 @@
 
 # Simplecov
 /coverage/*
+/test-results/*
