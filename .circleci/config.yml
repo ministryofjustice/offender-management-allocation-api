@@ -85,7 +85,16 @@ jobs:
       - store_artifacts:
           path: ~/test-results
 
-
+  rubocop:
+    <<: *defaults
+    docker:
+      - <<: *ruby_image
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - run: bundle --path vendor/bundle
+      - run: bundle exec rubocop
 
 workflows:
   version: 2
@@ -98,4 +107,6 @@ workflows:
       - security-static-analysis:
           requires:
             - build
-
+      - rubocop:
+          requires:
+            - build
