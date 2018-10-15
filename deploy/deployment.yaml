@@ -5,7 +5,11 @@ metadata:
   labels:
     app: allocation-api
 spec:
-  replicas: 3
+  replicas:
+    valueFrom:
+      secretKeyRef:
+        name: allocation-api-secrets
+        key: pod_replicas
   revisionHistoryLimit: 2
   minReadySeconds: 10
   strategy:
@@ -53,6 +57,16 @@ spec:
               value: "true"
             - name: RAILS_ENV
               value: "production"
+            - name: RAILS_MAX_THREADS
+              valueFrom:
+                secreteKeyRef:
+                  name: allocation-api-secrets
+                  key: rails_max_threads
+            - name: WEB_CONCURRENCY
+              valueFrom:
+                secreteKeyRef:
+                  name: allocation-api-secrets
+                  key: rails_web_concurrency
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
