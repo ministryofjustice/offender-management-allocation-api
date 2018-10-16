@@ -1,28 +1,68 @@
-ruby_image: &ruby_image
-  image: circleci/ruby:2.5.1
-  environment:
-    RAILS_ENV: test
-    PG_HOST: 127.0.0.1
-    PG_USER: ubuntu
-    RACK_ENV: test
-
-postgres_image: &postgres_image
-  image: circleci/postgres:10.5-alpine
-  environment:
-    POSTGRES_USER: ubuntu
-    POSTGRES_PASSWORD: ""
-    POSTGRES_DB: allocation-api_test
+version: 2
 
 defaults: &defaults
   working_directory: ~/repo
 
-version: 2
+references:
+  deploy_container_config: &deploy_container_config
+    docker:
+      - image: ${ECR_ENDPOINT}/cloud-platform/tools:circleci
+        environment:
+          GITHUB_TEAM_NAME_SLUG: offender-management
+
+  install_gpg: &install_gpg
+    run:
+      name: Install GPG
+      command: |
+        apk add \
+          --no-cache \
+          --no-progress \
+          gnupg
+
+  configure_gpg: &configure_gpg
+    run:
+      name: Configure GPG
+      command: |
+        echo "${GIT_CRYPT_KEY}" | base64 -d > /tmp/secring.asc
+        gpg --batch --allow-secret-key-import --import /tmp/secring.asc
+
+  decrypt_secrets: &decrypt_secrets
+    run:
+      name: Decrypt secrets file
+      command: git-crypt unlock
+
+  delete_gpg_key: &delete_gpg_key
+    run:
+      name: Delete GPG key
+      command: srm /tmp/secring.asc
+
+  test_container_config: &test_container_config
+    docker:
+      - image: circleci/ruby:2.5.1
+        environment:
+          RAILS_ENV: test
+          PG_HOST: 127.0.0.1
+          PG_USER: ubuntu
+          RACK_ENV: test
+          GITHUB_TEAM_NAME_SLUG: offender-management
+      - image: circleci/postgres:10.5-alpine
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: allocation-api_test
+
+  setup_aws_cli: &setup_aws_cli
+    run:
+      name: Setup aws on debian environment
+      command: |
+        sudo apt-get --assume-yes install python3-pip
+        sudo pip3 install awscli
+        $(aws ecr get-login --region eu-west-1 --no-include-email)
+
 jobs:
   build:
     <<: *defaults
-    docker:
-      - <<: *ruby_image
-      - <<: *postgres_image
+    <<: *test_container_config
     steps:
       - checkout
       - attach_workspace:
@@ -50,9 +90,7 @@ jobs:
 
   test:
     <<: *defaults
-    docker:
-      - <<: *ruby_image
-      - <<: *postgres_image
+    <<: *test_container_config
     steps:
       - checkout
       - attach_workspace:
@@ -74,8 +112,7 @@ jobs:
 
   security-static-analysis:
     <<: *defaults
-    docker:
-      - <<: *ruby_image
+    <<: *test_container_config
     steps:
       - checkout
       - attach_workspace:
@@ -87,14 +124,69 @@ jobs:
 
   rubocop:
     <<: *defaults
-    docker:
-      - <<: *ruby_image
+    <<: *test_container_config
     steps:
       - checkout
       - attach_workspace:
           at: ~/repo
       - run: bundle --path vendor/bundle
       - run: bundle exec rubocop
+
+  build_and_push_docker_image:
+    <<: *defaults
+    <<: *test_container_config
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_caching_layer: true
+      - attach_workspace:
+          at: ~/repo
+      - *setup_aws_cli
+      - run:
+          name: Build docker image
+          command: |
+            export BUILD_DATE=$(date -Is) >> $BASH_ENV
+            source $BASH_ENV
+            docker build \
+              --build-arg VERSION_NUMBER=${CIRCLE_BUILD_NUM} \
+              --build-arg COMMIT_ID=${CIRCLE_SHA1} \
+              --build-arg BUILD_DATE=${BUILD_DATE} \
+              --build-arg BUILD_TAG=${CIRCLE_BRANCH} \
+              -t app .
+      - run:
+          name: Push docker image
+          command: |
+            docker tag app "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker tag app "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:latest"
+              docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:latest"
+            fi
+
+  deploy_staging:
+    <<: *deploy_container_config
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Kubectl deployment staging setup
+          command: |
+            $(aws ecr get-login --region eu-west-1 --no-include-email)
+            setup-kube-auth
+            kubectl config use-context staging
+      - *install_gpg
+      - *configure_gpg
+      - *decrypt_secrets
+      - *delete_gpg_key
+      - deploy: 
+          name: Deploy to staging
+          command: |
+            kubectl apply -f ./deploy/ingress.yaml
+            kubectl apply -f ./deploy/service.yaml
+            kubectl apply -f ./deploy/deployment.yaml
 
 workflows:
   version: 2
@@ -110,3 +202,12 @@ workflows:
       - rubocop:
           requires:
             - build
+      - build_and_push_docker_image:
+          requires:
+            - test
+            - security-static-analysis
+            - rubocop
+      - deploy_staging:
+          requires:
+            - build_and_push_docker_image
+
