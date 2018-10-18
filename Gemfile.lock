@@ -33,6 +33,8 @@ GEM
       activemodel (= 5.2.1)
       activesupport (= 5.2.1)
       arel (>= 9.0)
+    activerecord-safer_migrations (2.0.0)
+      activerecord (>= 4.0)
     activestorage (5.2.1)
       actionpack (= 5.2.1)
       activerecord (= 5.2.1)
@@ -186,6 +188,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-safer_migrations
   bootsnap (>= 1.1.0)
   brakeman
   byebug
@@ -207,4 +210,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.4
+   1.16.6
