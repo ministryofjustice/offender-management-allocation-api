@@ -131,6 +131,7 @@ jobs:
     <<: *test_container_config
     steps:
       - checkout
+      - setup_remote_docker
       - attach_workspace:
           at: ~/repo
       - *setup_aws_cli
@@ -159,6 +160,7 @@ jobs:
     <<: *deploy_container_config
     steps:
       - checkout
+      - setup_remote_docker
       - attach_workspace:
           at: ~/repo
       - run:
