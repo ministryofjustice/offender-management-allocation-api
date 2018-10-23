@@ -54,7 +54,7 @@ spec:
                 secretKeyRef:
                   name: allocation-api-secrets
                   key: rails_web_concurrency
-            - name: DATABASE_URL
+            - name: DATABASE_HOST
               valueFrom:
                 secretKeyRef:
                   name: allocation-rds-instance-output
