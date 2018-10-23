@@ -57,8 +57,8 @@ spec:
             - name: DATABASE_HOST
               valueFrom:
                 secretKeyRef:
-                  name: allocation-rds-instance-output
-                  key: rds_instance_endpoint
+                  name: allocation-api-secrets
+                  key: database_host
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
