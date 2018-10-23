@@ -13,6 +13,8 @@ ENV APPVERSION=${VERSION_NUMBER}
 ENV APP_GIT_COMMIT=${COMMIT_ID}
 ENV APP_BUILD_DATE=${BUILD_DATE}
 ENV APP_BUILD_TAG=${BUILD_TAG}
+ENV RAILS_ENV=production
+ENV RAILS_LOG_TO_STDOUT=true
 
 WORKDIR /app
 
@@ -31,3 +33,5 @@ COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 RUN bundle install --without development test --jobs 2 --retry 3
 COPY . /app
+EXPOSE 3000
+CMD ["bundle", "exec", "puma", "-p", "3000", "-b", "0.0.0.0", "-C", "./config/puma_prod.rb", "--pidfile", "/tmp/server.pid"]
