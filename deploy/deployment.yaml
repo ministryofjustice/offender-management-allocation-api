@@ -44,7 +44,6 @@ spec:
                 secretKeyRef:
                   name: allocation-api-secrets
                   key: secret_key_base
-              value: "production"
             - name: RAILS_MAX_THREADS
               valueFrom:
                 secretKeyRef:

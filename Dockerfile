@@ -34,4 +34,5 @@ COPY Gemfile.lock /app/Gemfile.lock
 RUN bundle install --without development test --jobs 2 --retry 3
 COPY . /app
 EXPOSE 3000
-CMD ["bundle", "exec", "puma", "-p", "3000", "-b", "0.0.0.0", "-C", "./config/puma_prod.rb", "--pidfile", "/tmp/server.pid"]
+RUN chmod +x ./run.sh
+ENTRYPOINT ["./run.sh"]
