@@ -61,7 +61,7 @@ spec:
                   key: rails_web_concurrency
             - name: DATABASE_HOST
               # Temporary
-              valueFrom: allocation-api-secrets
+              valueFrom:
                 secretKeyRef:
                   name: allocation-api-secrets
                   key: database_host
