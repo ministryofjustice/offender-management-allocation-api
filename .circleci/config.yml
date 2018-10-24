@@ -43,7 +43,7 @@ references:
         environment:
           POSTGRES_USER: ubuntu
           POSTGRES_PASSWORD: ""
-          POSTGRES_DB: allocation-api_test
+          POSTGRES_DB: offender-management-allocation-api_test
 
   setup_aws_cli: &setup_aws_cli
     run:
