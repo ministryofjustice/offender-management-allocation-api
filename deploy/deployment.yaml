@@ -59,6 +59,11 @@ spec:
                 secretKeyRef:
                   name: allocation-api-secrets
                   key: rails_web_concurrency
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-api-secrets
+                  key: sentry_dsn
             - name: DATABASE_HOST
               # Temporary
               valueFrom:
