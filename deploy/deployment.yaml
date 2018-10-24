@@ -29,13 +29,13 @@ spec:
             - containerPort: 3000
           livenessProbe:
             httpGet:
-              path: /
+              path: /status
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 60
           readinessProbe:
             httpGet:
-              path: /
+              path: /status
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 60
@@ -45,7 +45,7 @@ spec:
                 secretKeyRef:
                   name: allocation-api-secrets
                   key: secret_key_base
-            - name: RAILS_SERVE_STATIC_FILES
+            - name: RAILS_LOG_TO_STDOUT
               value: "true"
             - name: RAILS_ENV
               value: "production"
@@ -59,11 +59,18 @@ spec:
                 secretKeyRef:
                   name: allocation-api-secrets
                   key: rails_web_concurrency
-            - name: DATABASE_URL
-              valueFrom:
+            - name: DATABASE_HOST
+              # Temporary
+              valueFrom: allocation-api-secrets
                 secretKeyRef:
-                  name: allocation-rds-instance-output
-                  key: rds_instance_endpoint
+                  name: allocation-api-secrets
+                  key: database_host
+              # This value cannot be used as the endpoint also contains the port
+              # New key value pair has been requested from cloud platform
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: allocation-rds-instance-output
+              #     key: rds_instance_endpoint
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
