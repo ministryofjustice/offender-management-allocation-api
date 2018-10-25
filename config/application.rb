@@ -17,6 +17,6 @@ module OffenderManagementAllocationApi
   class Application < Rails::Application
     config.load_defaults 5.2
     config.api_only = true
-    config.sentry_dsn = ENV['SENTRY_DSN'].strip
+    config.sentry_dsn = ENV['SENTRY_DSN']
   end
 end
