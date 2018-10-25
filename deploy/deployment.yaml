@@ -24,7 +24,7 @@ spec:
         - name: allocation-api
           image: 926803513772.dkr.ecr.eu-west-1.amazonaws.com/offender-management/offender-management-allocation-api:latest
           imagePullPolicy: Always
-          command: ['sh', '-c', "bundle exec puma -p 3000 -b '0.0.0.0' -C ./config/puma_prod.rb --pidfile /tmp/server.pid"]
+          command: ['sh', '-c', "bundle exec puma -p 3000 -C ./config/puma_prod.rb --pidfile /tmp/server.pid"]
           ports:
             - containerPort: 3000
           livenessProbe:
@@ -65,17 +65,10 @@ spec:
                   name: allocation-api-secrets
                   key: sentry_dsn
             - name: DATABASE_HOST
-              # Temporary
               valueFrom:
                 secretKeyRef:
-                  name: allocation-api-secrets
-                  key: database_host
-              # This value cannot be used as the endpoint also contains the port
-              # New key value pair has been requested from cloud platform
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: allocation-rds-instance-output
-              #     key: rds_instance_endpoint
+                  name: allocation-rds-instance-output
+                  key: rds_instance_address
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
