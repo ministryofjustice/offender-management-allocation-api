@@ -65,17 +65,10 @@ spec:
                   name: allocation-api-secrets
                   key: sentry_dsn
             - name: DATABASE_HOST
-              # Temporary
               valueFrom:
                 secretKeyRef:
-                  name: allocation-api-secrets
-                  key: database_host
-              # This value cannot be used as the endpoint also contains the port
-              # New key value pair has been requested from cloud platform
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: allocation-rds-instance-output
-              #     key: rds_instance_endpoint
+                  name: allocation-rds-instance-output
+                  key: rds_instance_address
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
