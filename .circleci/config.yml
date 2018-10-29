@@ -32,7 +32,7 @@ references:
 
   test_container_config: &test_container_config
     docker:
-      - image: circleci/ruby:2.5.1
+      - image: circleci/ruby:2.5.3
         environment:
           RAILS_ENV: test
           PG_HOST: 127.0.0.1
