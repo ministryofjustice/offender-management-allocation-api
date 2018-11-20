@@ -5,6 +5,7 @@ ruby '2.5.3'
 
 gem 'activerecord-safer_migrations'
 gem 'bootsnap', '>= 1.1.0', require: false
+gem 'jwt'
 gem 'lograge'
 gem 'logstash-event'
 gem 'pg', '>= 0.18', '< 2.0'
