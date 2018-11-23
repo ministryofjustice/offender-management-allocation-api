@@ -1,19 +1,11 @@
 require 'rails_helper'
 
-describe StatusController do
-  describe 'GET /status' do
-    it 'returns a status message' do
-      get('/status')
-      json = JSON.parse(response.body)
+describe 'GET /status', type: :request do
+  it 'returns the status of the database' do
+    get('/status', headers: generate_jwt_token)
+    json = JSON.parse(response.body)
 
-      expect(json['status']).to eq('ok')
-    end
-
-    it 'returns the postgres client version' do
-      get('/status')
-      json = JSON.parse(response.body)
-
-      expect(json['postgresVersion']).to match(/PostgreSQL/)
-    end
+    expect(json['status']).to eq('ok')
+    expect(json['postgresVersion']).to match(/PostgreSQL/)
   end
 end
