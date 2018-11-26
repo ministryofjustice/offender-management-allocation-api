@@ -1,5 +1,4 @@
 require 'rails_helper'
-# require 'byebug'
 
 describe ApplicationController do
   describe 'JWT validation' do
