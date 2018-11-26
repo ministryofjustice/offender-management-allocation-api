@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 describe ApplicationController do
   describe 'JWT validation' do
     describe 'without a JWT token' do
@@ -23,6 +24,16 @@ describe ApplicationController do
           expired_token = generate_jwt_token(exp: Time.new(2018).to_i)
 
           get('/status', headers: expired_token)
+
+          expect(response.status).to be(401)
+        end
+      end
+
+      describe 'that does not have correct scope' do
+        it 'returns HTTP status 401' do
+          token_without_scope = generate_jwt_token(scope: [])
+
+          get('/status', headers: token_without_scope)
 
           expect(response.status).to be(401)
         end
