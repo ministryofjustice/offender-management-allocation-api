@@ -16,7 +16,7 @@ private
       true,
       algorithm: 'RS256'
   rescue JWT::ExpiredSignature, JWT::DecodeError
-    head 401
+    head :unauthorized
   end
 
   def nomis_oauth_public_key
