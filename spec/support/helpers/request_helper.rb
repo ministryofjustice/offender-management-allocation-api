@@ -15,7 +15,7 @@ module Request
 
       token = JWT.encode payload, rsa_private, 'RS256'
       {
-        'Authorization': token.to_s
+        'Authorization': "Bearer #{token.to_s}"
       }
     end
   end
