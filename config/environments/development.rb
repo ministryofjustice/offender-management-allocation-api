@@ -22,6 +22,4 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
   config.active_record.verbose_query_logs = true
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
-
-  config.nomis_oauth_public_key = ENV.fetch('NOMIS_OAUTH_PUB_KEY')
 end
