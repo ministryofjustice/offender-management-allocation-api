@@ -2,12 +2,21 @@ require 'jwt'
 
 class ApplicationController < ActionController::API
   def authenticate
-    head 401 unless token && token_valid?
+    if token && token_valid?
+      response.headers['WWW-Authenticate'] = 'Bearer scope="read"'
+    else
+      send_unauthorised_response
+    end
   end
 
-private
+  private
 
-  # :nocov:
+  def send_unauthorised_response
+    head(
+      :unauthorized,
+      'WWW-Authenticate' => 'Bearer scope=""'
+    )
+  end
 
   def token
     request.headers[:authorization]&.split(' ')&.last
@@ -23,10 +32,8 @@ private
 
     correct_scope?(decoded_token)
 
-    decoded_token
   rescue JWT::ExpiredSignature, JWT::DecodeError, Nomis::Oauth2::InvalidTokenScope => e
     Raven.capture_exception(e)
-    head :unauthorized
   end
 
   def nomis_oauth_public_key
@@ -36,13 +43,15 @@ private
   def correct_scope?(decoded_token)
     scope = decoded_token.first['scope']
 
-    raise Nomis::Oauth2::InvalidTokenScope if invalid?(scope)
+    if invalid?(scope)
+      raise Nomis::Oauth2::InvalidTokenScope
+    else
+      true
+    end
   end
 
   def invalid?(scope)
     scope.empty? || !scope.include?('read')
   end
-
-  # :nocov:
 end
 

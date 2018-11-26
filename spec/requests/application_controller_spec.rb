@@ -1,4 +1,5 @@
 require 'rails_helper'
+# require 'byebug'
 
 describe ApplicationController do
   describe 'JWT validation' do
@@ -7,6 +8,7 @@ describe ApplicationController do
         get('/status')
 
         expect(response.status).to be(401)
+        expect(response.headers['WWW-Authenticate']).to eq('Bearer scope=""')
       end
     end
 
@@ -15,6 +17,7 @@ describe ApplicationController do
         get('/status', headers: generate_jwt_token)
 
         expect(response.status).to be(200)
+        expect(response.headers['WWW-Authenticate']).to eq('Bearer scope="read"')
       end
     end
 
@@ -26,6 +29,7 @@ describe ApplicationController do
           get('/status', headers: expired_token)
 
           expect(response.status).to be(401)
+          expect(response.headers['WWW-Authenticate']).to eq('Bearer scope=""')
         end
       end
 
@@ -36,6 +40,7 @@ describe ApplicationController do
           get('/status', headers: token_without_scope)
 
           expect(response.status).to be(401)
+          expect(response.headers['WWW-Authenticate']).to eq('Bearer scope=""')
         end
       end
 
@@ -50,6 +55,7 @@ describe ApplicationController do
           get('/status', headers: auth_header)
 
           expect(response.status).to be(401)
+          expect(response.headers['WWW-Authenticate']).to eq('Bearer scope=""')
         end
       end
     end
