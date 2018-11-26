@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
     end
   end
 
-  private
+private
 
   def send_unauthorised_response
     head(
@@ -31,7 +31,6 @@ class ApplicationController < ActionController::API
     )
 
     correct_scope?(decoded_token)
-
   rescue JWT::ExpiredSignature, JWT::DecodeError, Nomis::Oauth2::InvalidTokenScope => e
     Raven.capture_exception(e)
   end
@@ -54,4 +53,3 @@ class ApplicationController < ActionController::API
     scope.empty? || !scope.include?('read')
   end
 end
-

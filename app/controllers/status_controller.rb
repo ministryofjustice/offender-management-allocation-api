@@ -6,7 +6,7 @@ class StatusController < ApplicationController
       json: {
         'status' => 'ok',
         'postgresVersion' => postgres_version
-        }
+      }
       )
   end
 
