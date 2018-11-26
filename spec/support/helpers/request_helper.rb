@@ -5,7 +5,7 @@ module Request
         'internal_user': false,
         'scope': %w[read write],
         'exp': Time.new.to_i + 4 * 3600,
-        'client_id': 'offender-manager-allocation-manager'
+        'client_id': 'offender-management-allocation-manager'
       }.merge(options)
 
       rsa_private = OpenSSL::PKey::RSA.generate 2048
