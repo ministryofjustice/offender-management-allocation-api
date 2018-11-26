@@ -4,11 +4,7 @@ module Authorisable
   extend ActiveSupport::Concern
 
   def authenticate
-    if token && token_valid?
-      response.headers['WWW-Authenticate'] = 'Bearer scope="read"'
-    else
-      send_unauthorised_response
-    end
+    send_unauthorised_response unless token && token_valid?
   end
 
 private
@@ -16,7 +12,7 @@ private
   def send_unauthorised_response
     head(
       :unauthorized,
-      'WWW-Authenticate' => 'Bearer scope=""'
+      'WWW-Authenticate' => 'Bearer scope="read"'
     )
   end
 
