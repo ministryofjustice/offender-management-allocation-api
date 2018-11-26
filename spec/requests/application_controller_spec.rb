@@ -34,9 +34,9 @@ describe ApplicationController do
           payload = {}
           incorrect_token = OpenSSL::PKey::RSA.generate(2048)
           token = JWT.encode payload, incorrect_token, 'RS256'
-          token = { 'Authorization': token.to_s }
+          auth_header = { 'Authorization': token.to_s }
 
-          get('/status', headers: token)
+          get('/status', headers: auth_header)
 
           expect(response.status).to be(401)
         end
