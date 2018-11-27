@@ -84,3 +84,8 @@ spec:
                 secretKeyRef:
                   name: allocation-rds-instance-output
                   key: database_username
+            - name: NOMIS_OAUTH_PUB_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-api-secrets
+                  key: nomis_oauth_pub_key

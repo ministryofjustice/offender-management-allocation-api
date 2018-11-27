@@ -18,5 +18,6 @@ module OffenderManagementAllocationApi
     config.load_defaults 5.2
     config.api_only = true
     config.sentry_dsn = ENV['SENTRY_DSN']
+    config.nomis_oauth_public_key = ENV.fetch('NOMIS_OAUTH_PUB_KEY')
   end
 end

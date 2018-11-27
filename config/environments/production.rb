@@ -24,4 +24,6 @@ Rails.application.configure do
 
   config.lograge.logger = ActiveSupport::Logger.new \
     "#{Rails.root}/log/logstash_#{Rails.env}.json"
+
+  config.nomis_oauth_public_key = ENV.fetch('NOMIS_OAUTH_PUB_KEY')
 end
