@@ -1,5 +1,5 @@
 class StatusController < ApplicationController
-  before_action :authenticate
+  before_action :authorise
 
   def index
     render(

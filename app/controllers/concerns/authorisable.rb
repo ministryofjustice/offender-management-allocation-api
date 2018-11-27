@@ -3,7 +3,7 @@ require 'jwt'
 module Authorisable
   extend ActiveSupport::Concern
 
-  def authenticate
+  def authorise
     send_unauthorised_response unless token && token_valid?
   end
 
