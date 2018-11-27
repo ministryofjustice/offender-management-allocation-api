@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'byebug'
 
 describe 'GET /health', type: :request do
   it 'returns a plain text status' do
