@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ApplicationController do
+describe Authorisable, type: :request  do
   describe 'JWT validation' do
     describe 'without a JWT token' do
       it 'returns HTTP status 401' do
