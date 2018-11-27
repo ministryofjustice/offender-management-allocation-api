@@ -7,7 +7,7 @@ class StatusController < ApplicationController
         'status' => 'ok',
         'postgresVersion' => postgres_version
       }
-      )
+    )
   end
 
 private
