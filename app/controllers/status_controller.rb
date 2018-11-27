@@ -7,10 +7,10 @@ class StatusController < ApplicationController
         'status' => 'ok',
         'postgresVersion' => postgres_version
       }
-      )
+    )
   end
 
-private
+  private
 
   def postgres_version
     @postgres_version ||= ActiveRecord::Base.connection.select_value('SELECT version()')
