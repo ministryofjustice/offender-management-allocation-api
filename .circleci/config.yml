@@ -174,16 +174,43 @@ jobs:
       - *install_gpg
       - *configure_gpg
       - *decrypt_secrets
-      - deploy: 
+      - deploy:
           name: Deploy to staging
           command: |
-            kubectl set image -f deploy/deployment.yaml allocation-api=${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1} --local -o yaml \
+            kubectl set image -f deploy/staging/deployment.yaml allocation-api=${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1} --local -o yaml \
             | kubectl apply -f -
             kubectl apply \
-              -f ./deploy/ingress.yaml \
-              -f ./deploy/service.yaml \
-              -f ./deploy/allocation-api-secrets.yaml \
-              -f ./deploy/deployment.yaml
+              -f ./deploy/staging/ingress.yaml \
+              -f ./deploy/staging/service.yaml \
+              -f ./deploy/staging/allocation-api-secrets.yaml \
+              -f ./deploy/staging/deployment.yaml
+
+  deploy_production:
+    <<: *deploy_container_config
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Kubectl deployment production setup
+          command: |
+            $(aws ecr get-login --region eu-west-1 --no-include-email)
+            setup-kube-auth
+            kubectl config use-context production
+      - *install_gpg
+      - *configure_gpg
+      - *decrypt_secrets
+      - deploy:
+          name: Deploy to production
+          command: |
+            kubectl set image -f deploy/production/deployment.yaml allocation-api=${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1} --local -o yaml \
+            | kubectl apply -f -
+            kubectl apply \
+              -f ./deploy/production/ingress.yaml \
+              -f ./deploy/production/service.yaml \
+              -f ./deploy/production/allocation-api-secrets.yaml \
+              -f ./deploy/production/deployment.yaml
 
 workflows:
   version: 2
@@ -207,6 +234,21 @@ workflows:
       - deploy_staging:
           requires:
             - build_and_push_docker_image
+          filters:
+            branches:
+              only: master
+      - deploy_production_approval:
+          type: approval
+          requires:
+            - build_and_push_docker_image
+            - deploy_staging
+          filters:
+            branches:
+              only: master
+      - deploy_production:
+          requires:
+            - deploy_production_approval
+            - deploy_staging
           filters:
             branches:
               only: master
