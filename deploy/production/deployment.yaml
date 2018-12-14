@@ -1,0 +1,88 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: allocation-api
+  labels:
+    app: allocation-api
+spec:
+  replicas: 3
+  revisionHistoryLimit: 2
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 2
+  selector:
+    matchLabels:
+      app: allocation-api
+  template:
+    metadata:
+      labels:
+        app: allocation-api
+    spec:
+      containers:
+        - name: allocation-api
+          image: 926803513772.dkr.ecr.eu-west-1.amazonaws.com/offender-management/offender-management-allocation-api:latest
+          imagePullPolicy: Always
+          command: ['sh', '-c', "bundle exec puma -p 3000 -C ./config/puma_prod.rb --pidfile /tmp/server.pid"]
+          ports:
+            - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 60
+          env:
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-api-secrets
+                  key: secret_key_base
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
+            - name: RAILS_ENV
+              value: "production"
+            - name: NOMIS_OAUTH_PUB_KEY
+              value:
+            - name: RAILS_MAX_THREADS
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-api-secrets
+                  key: rails_max_threads
+            - name: WEB_CONCURRENCY
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-api-secrets
+                  key: rails_web_concurrency
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-api-secrets
+                  key: sentry_dsn
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-rds-instance-output
+                  key: rds_instance_address
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-rds-instance-output
+                  key: database_password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-rds-instance-output
+                  key: database_name
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: allocation-rds-instance-output
+                  key: database_username
