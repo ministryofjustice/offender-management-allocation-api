@@ -10,6 +10,7 @@ gem 'lograge'
 gem 'logstash-event'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
+gem 'prometheus_exporter'
 gem 'rails', '~> 5.2.2'
 gem 'sentry-raven'
 
