@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: allocation-api
+  namespace: offender-management-staging
+spec:
+  selector:
+    matchLabels:
+      app: allocation-api
+  namespaceSelector:
+    matchNames:
+    - offender-management-staging
+  endpoints:
+  - port: "9394"
+    interval: 15s
