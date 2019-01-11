@@ -11,5 +11,5 @@ spec:
     matchNames:
     - offender-management-staging
   endpoints:
-  - port: "8080"
+  - port: "9394"
     interval: 15s
