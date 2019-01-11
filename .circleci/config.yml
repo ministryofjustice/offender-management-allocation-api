@@ -182,6 +182,7 @@ jobs:
             kubectl apply \
               -f ./deploy/ingress.yaml \
               -f ./deploy/service.yaml \
+              -f ./deploy/service-monitor.yaml \
               -f ./deploy/allocation-api-secrets.yaml \
               -f ./deploy/deployment.yaml
 
