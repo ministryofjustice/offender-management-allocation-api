@@ -162,9 +162,6 @@ jobs:
     <<: *deploy_container_config
     steps:
       - checkout
-      - setup_remote_docker
-      - attach_workspace:
-          at: ~/repo
       - run:
           name: Kubectl deployment staging setup
           command: |
