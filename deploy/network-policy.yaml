@@ -13,4 +13,4 @@ spec:
   - from:
     - namespaceSelector: 
         matchLabels: 
-          component: monitoring
+          component: offender-management-staging
