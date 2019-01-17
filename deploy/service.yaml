@@ -3,10 +3,15 @@ kind: Service
 metadata:
   name: allocation-api
   namespace: offender-management-staging
+  labels:
+    app: allocation-api
 spec:
   ports:
   - port: 3000
     name: http
     targetPort: 3000
+  - port: 9394 
+    name: metrics
+    targetPort: 9394
   selector:
     app: allocation-api

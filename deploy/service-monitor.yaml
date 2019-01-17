@@ -11,5 +11,5 @@ spec:
     matchNames:
     - offender-management-staging
   endpoints:
-  - port: "9394"
+  - port: metrics
     interval: 15s
