@@ -28,7 +28,14 @@ references:
   decrypt_secrets: &decrypt_secrets
     run:
       name: Decrypt secrets file
-      command: git-crypt unlock
+      command: |
+        gpg --export-ownertrust > /tmp/ownertrust.txt
+        echo $GPG_KEY_ID:1 >> /tmp/ownertrust.txt
+        gpg --import-ownertrust /tmp/ownertrust.txt
+        gpgconf --kill gpg-agent
+        gpg-agent --daemon --allow-preset-passphrase
+        /usr/libexec/gpg-preset-passphrase --preset --passphrase $GPG_PASSPHRASE $GPG_KEY_KEYGRIP_ID
+        git-crypt unlock
 
   test_container_config: &test_container_config
     docker:
