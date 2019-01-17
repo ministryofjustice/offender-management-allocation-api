@@ -190,6 +190,7 @@ jobs:
               -f ./deploy/ingress.yaml \
               -f ./deploy/service.yaml \
               -f ./deploy/service-monitor.yaml \
+              -f ./deploy/network-policy.yaml \
               -f ./deploy/allocation-api-secrets.yaml \
               -f ./deploy/deployment.yaml
 
