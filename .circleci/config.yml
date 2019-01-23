@@ -181,7 +181,7 @@ jobs:
       - *install_gpg
       - *configure_gpg
       - *decrypt_secrets
-      - deploy: 
+      - deploy:
           name: Deploy to staging
           command: |
             kubectl set image -f deploy/deployment.yaml allocation-api=${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1} --local -o yaml \
