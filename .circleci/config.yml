@@ -2,11 +2,12 @@ references:
   defaults: &defaults
     working_directory: ~/repo
 
+  github_team_name_slug: &github_team_name_slug
+    GITHUB_TEAM_NAME_SLUG: offender-management
+
   deploy_container_config: &deploy_container_config
     docker:
       - image: ${ECR_ENDPOINT}/cloud-platform/tools:circleci
-        environment:
-          GITHUB_TEAM_NAME_SLUG: offender-management
 
   install_gpg: &install_gpg
     run:
@@ -82,7 +83,7 @@ references:
           docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:latest"
         fi
       environment:
-        GITHUB_TEAM_NAME_SLUG: offender-management
+        <<: *github_team_name_slug
         REPONAME: offender-management-allocation-api
 
 version: 2
@@ -209,6 +210,8 @@ jobs:
               -f ./deploy/network-policy.yaml \
               -f ./deploy/allocation-api-secrets.yaml \
               -f ./deploy/deployment.yaml
+          environment:
+            <<: *github_team_name_slug
 
 workflows:
   version: 2
