@@ -147,9 +147,10 @@ jobs:
     <<: *test_container_config
     steps:
       - checkout
-      - setup_remote_docker
       - attach_workspace:
           at: ~/repo
+      - setup_remote_docker:
+          docker_layer_caching: true
       - *setup_aws_cli
       - run:
           name: Build docker image
