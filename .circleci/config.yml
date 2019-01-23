@@ -45,7 +45,6 @@ references:
           PG_HOST: 127.0.0.1
           PG_USER: ubuntu
           RACK_ENV: test
-          GITHUB_TEAM_NAME_SLUG: offender-management
       - image: circleci/postgres:10.5-alpine
         environment:
           POSTGRES_USER: ubuntu
@@ -164,6 +163,8 @@ jobs:
               docker tag app "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:latest"
               docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:latest"
             fi
+          environment:
+            GITHUB_TEAM_NAME_SLUG: offender-management
 
   deploy_staging:
     <<: *deploy_container_config
