@@ -59,7 +59,7 @@ references:
 
 version: 2
 jobs:
-  install_dependencies_and_set_up_test_db:
+  install_dependencies:
     <<: *defaults
     <<: *test_container_config
     steps:
@@ -81,6 +81,15 @@ jobs:
       - persist_to_workspace:
           root: .
           paths: vendor/bundle
+
+  set_up_test_db:
+    <<: *defaults
+    <<: *test_container_config
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - run: bundle --path vendor/bundle
       - run:
           name: Migrate database
           command: |
@@ -199,16 +208,20 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - install_dependencies_and_set_up_test_db
+      - install_dependencies
+      - set_up_test_db:
+          requires:
+            - install_dependencies
       - test:
           requires:
-            - install_dependencies_and_set_up_test_db
+            - install_dependencies
+            - set_up_test_db
       - security-static-analysis:
           requires:
-            - install_dependencies_and_set_up_test_db
+            - install_dependencies
       - rubocop:
           requires:
-            - install_dependencies_and_set_up_test_db
+            - install_dependencies
       - build_and_push_docker_image:
           requires:
             - test
