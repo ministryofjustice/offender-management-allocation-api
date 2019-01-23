@@ -50,7 +50,7 @@ references:
           POSTGRES_PASSWORD: ""
           POSTGRES_DB: offender-management-allocation-api_test
 
-  setup_aws_cli: &setup_aws_cli
+  install_aws_cli: &install_aws_cli
     run:
       name: Setup aws on debian environment
       command: |
@@ -180,7 +180,7 @@ jobs:
           at: ~/repo
       - setup_remote_docker:
           docker_layer_caching: true
-      - *setup_aws_cli
+      - *install_aws_cli
       - *build_docker_image
       - *push_docker_image
 
