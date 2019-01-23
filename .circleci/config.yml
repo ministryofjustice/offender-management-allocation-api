@@ -1,9 +1,9 @@
 version: 2
 
-defaults: &defaults
-  working_directory: ~/repo
-
 references:
+  defaults: &defaults
+    working_directory: ~/repo
+
   deploy_container_config: &deploy_container_config
     docker:
       - image: ${ECR_ENDPOINT}/cloud-platform/tools:circleci
