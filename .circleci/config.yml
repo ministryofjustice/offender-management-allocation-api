@@ -59,7 +59,7 @@ references:
 
 version: 2
 jobs:
-  build:
+  install_dependencies_and_set_up_test_db:
     <<: *defaults
     <<: *test_container_config
     steps:
@@ -199,16 +199,16 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - install_dependencies_and_set_up_test_db
       - test:
           requires:
-            - build
+            - install_dependencies_and_set_up_test_db
       - security-static-analysis:
           requires:
-            - build
+            - install_dependencies_and_set_up_test_db
       - rubocop:
           requires:
-            - build
+            - install_dependencies_and_set_up_test_db
       - build_and_push_docker_image:
           requires:
             - test
