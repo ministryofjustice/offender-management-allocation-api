@@ -165,6 +165,7 @@ jobs:
             fi
           environment:
             GITHUB_TEAM_NAME_SLUG: offender-management
+            REPONAME: offender-management-allocation-api
 
   deploy_staging:
     <<: *deploy_container_config
