@@ -55,7 +55,6 @@ references:
       command: |
         sudo apt-get --assume-yes install python3-pip
         sudo pip3 install awscli
-        $(aws ecr get-login --region eu-west-1 --no-include-email)
 
 version: 2
 jobs:
@@ -166,6 +165,8 @@ jobs:
       - run:
           name: Push docker image
           command: |
+            login="$(aws ecr get-login --region eu-west-1 --no-include-email)"
+            ${login}
             docker tag app "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
             docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
@@ -185,7 +186,6 @@ jobs:
       - run:
           name: Kubectl deployment staging setup
           command: |
-            $(aws ecr get-login --region eu-west-1 --no-include-email)
             setup-kube-auth
             kubectl config use-context staging
       - *install_gpg
