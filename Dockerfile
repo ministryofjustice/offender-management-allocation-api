@@ -31,5 +31,3 @@ COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 RUN bundle install --without development test --jobs 2 --retry 3
 COPY . /app
-
-ENTRYPOINT ["./run.sh"]
