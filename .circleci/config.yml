@@ -133,6 +133,10 @@ jobs:
           at: ~/repo
       - run: bundle --path vendor/bundle
       - run:
+          name: Migrate database
+          command: |
+            bundle exec rake db:create db:schema:load --trace db:migrate
+      - run:
           name: Download Code Climate
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
