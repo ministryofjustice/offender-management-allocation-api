@@ -10,7 +10,15 @@ RSpec.configure do |config|
         title: 'Offender Management Allocation API',
         version: 'v1'
       },
-      paths: {}
+      paths: {},
+      securityDefinitions: {
+        Bearer: {
+          description: "...",
+          type: :apiKey,
+          name: 'Authorization',
+          in: :header
+        }
+      }
     }
   }
 end
