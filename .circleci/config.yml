@@ -122,8 +122,7 @@ jobs:
       - run:
           name: Migrate database
           command: |
-            bundle exec rake db:create db:schema:load --trace
-            bundle exec rake db:migrate
+            bundle exec rake db:create db:schema:load --trace db:migrate
 
   test:
     <<: *defaults
