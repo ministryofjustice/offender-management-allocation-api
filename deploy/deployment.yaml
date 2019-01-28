@@ -64,26 +64,26 @@ spec:
                 secretKeyRef:
                   name: allocation-api-secrets
                   key: sentry_dsn
-            - name: DATABASE_HOST
+            - name: POSTGRES_HOST
               valueFrom:
                 secretKeyRef:
                   name: allocation-rds-instance-output
                   key: rds_instance_address
-            - name: DATABASE_PASSWORD
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: allocation-rds-instance-output
-                  key: database_password
-            - name: DATABASE_NAME
+                  key: postgres_password
+            - name: POSTGRES_NAME
               valueFrom:
                 secretKeyRef:
                   name: allocation-rds-instance-output
-                  key: database_name
-            - name: DATABASE_USERNAME
+                  key: postgres_name
+            - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   name: allocation-rds-instance-output
-                  key: database_username
+                  key: postgres_user
             - name: NOMIS_OAUTH_PUB_KEY
               valueFrom:
                 secretKeyRef:
