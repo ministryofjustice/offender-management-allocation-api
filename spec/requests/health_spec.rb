@@ -1,9 +1,16 @@
-require 'rails_helper'
+require 'swagger_helper'
 
 describe 'GET /health', type: :request do
-  it 'returns a plain text status' do
-    get('/health')
+  path '/health' do
+    get 'Gets system health' do
+      tags 'System'
+      produces 'text/plain'
 
-    expect(response.body).to eq('Everything is fine.')
+      response '200', 'Successfully returned the system health' do
+        run_test! do |response|
+          expect(response.body).to include('Everything is fine.')
+        end
+      end
+    end
   end
 end

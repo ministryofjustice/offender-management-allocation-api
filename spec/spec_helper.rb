@@ -1,4 +1,5 @@
 require 'simplecov'
+
 SimpleCov.minimum_coverage 100
 
 SimpleCov.start 'rails' do
@@ -11,6 +12,10 @@ if ENV['CIRCLE_ARTIFACTS']
 end
 
 RSpec.configure do |config|
+  config.formatter = 'progress'
+  config.formatter = 'Rswag::Specs::SwaggerFormatter'
+  config.order = 'defined'
+
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
