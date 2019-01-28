@@ -20,6 +20,56 @@
           }
         }
       }
+    },
+    "/status": {
+      "get": {
+        "summary": "Gets database status",
+        "tags": [
+          "System"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": {
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned the database status",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "postgresVersion": "PostgresSQL 10.0"
+              }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "postgresVersion": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Was not authenticated to return the database status"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "description": "...",
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
     }
   }
 }
