@@ -1,0 +1,25 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Offender Management Allocation API",
+    "version": "v1"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Gets system health",
+        "tags": [
+          "System"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned the system health"
+          }
+        }
+      }
+    }
+  }
+}
