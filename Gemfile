@@ -13,12 +13,15 @@ gem 'puma', '~> 3.11'
 gem 'prometheus_exporter'
 gem 'rails', '~> 5.2.2'
 gem 'sentry-raven'
+gem 'rswag-api'
+gem 'rswag-ui'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails'
   gem 'rubocop'
   gem 'rubocop-rspec'
+  gem 'rswag-specs'
 end
 
 group :development do
