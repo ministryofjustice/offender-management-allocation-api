@@ -5,6 +5,95 @@
     "version": "v1"
   },
   "paths": {
+    "/allocation": {
+      "post": {
+        "summary": "Creates a new allocation",
+        "tags": [
+          "Allocation"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": ""
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "allocation",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "staff_id": {
+                  "type": "string"
+                },
+                "offender_no": {
+                  "type": "string"
+                },
+                "offender_id": {
+                  "type": "string"
+                },
+                "allocated_at_tier": {
+                  "type": "string"
+                },
+                "prison": {
+                  "type": "string"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "staff_id",
+                "offender_no",
+                "offender_id",
+                "prison",
+                "note"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Creates a new allocation, inactivating any previous allocations for the offender",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "errorMessage": ""
+              }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "errorMessage": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Must be authenticated to create an allocation"
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "summary": "Gets system health",
@@ -32,14 +121,10 @@
         ],
         "security": [
           {
-            "Bearer": {
-            }
+            "Bearer": ""
           }
         ],
         "responses": {
-          "401": {
-            "description": "Was not authenticated to return the database status"
-          },
           "200": {
             "description": "Successfully returned the database status",
             "examples": {
@@ -59,6 +144,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Was not authenticated to return the database status"
           }
         }
       }
