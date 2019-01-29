@@ -111,7 +111,7 @@ jobs:
           root: .
           paths: vendor/bundle
 
- set_up_test_db:
+  set_up_test_db:
     <<: *defaults
     <<: *test_container_config
     steps:
