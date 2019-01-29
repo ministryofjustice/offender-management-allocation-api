@@ -111,19 +111,6 @@ jobs:
           root: .
           paths: vendor/bundle
 
-  set_up_test_db:
-    <<: *defaults
-    <<: *test_container_config
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/repo
-      - run: bundle --path vendor/bundle
-      - run:
-          name: Migrate database
-          command: |
-            bundle exec rake db:create db:schema:load --trace db:migrate
-
   test:
     <<: *defaults
     <<: *test_container_config
@@ -221,13 +208,9 @@ workflows:
   build_and_test:
     jobs:
       - install_dependencies
-      - set_up_test_db:
-          requires:
-            - install_dependencies
       - test:
           requires:
             - install_dependencies
-            - set_up_test_db
       - security-static-analysis:
           requires:
             - install_dependencies
