@@ -59,8 +59,8 @@ describe 'POST /allocation', type: :request do
         let(:allocation) {
           {
             staff_id: '1',
-            offender_no: 'A1A',
-            offender_id: '1',
+            offender_no: '1',
+            offender_id: 'A1A',
             prison: 'LEI',
             created_by: 'Fred',
             allocated_at_tier: 'A',
@@ -76,7 +76,7 @@ describe 'POST /allocation', type: :request do
           expect(json['errorMessage']).to eq('')
 
           expect(Allocation.count).to eq(1)
-          expect(Allocation.first.offender_no).to eq('A1A')
+          expect(Allocation.first.offender_id).to eq('A1A')
         end
       end
 
