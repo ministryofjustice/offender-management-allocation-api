@@ -41,8 +41,8 @@ references:
       - image: circleci/ruby:2.5.3
         environment:
           RAILS_ENV: test
-          PG_HOST: 127.0.0.1
-          PG_USER: ubuntu
+          PGHOST: 127.0.0.1
+          PGUSER: ubuntu
           RACK_ENV: test
       - image: circleci/postgres:10.5-alpine
         environment:
