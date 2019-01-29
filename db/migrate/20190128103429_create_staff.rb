@@ -5,8 +5,6 @@ class CreateStaff < ActiveRecord::Migration[5.2]
       t.string :working_pattern
       t.string :status
       t.timestamps
-
-      t.index :staff_id, unique: true
     end
   end
 

@@ -37,6 +37,9 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Was not authenticated to return the database status"
+          },
           "200": {
             "description": "Successfully returned the database status",
             "examples": {
@@ -56,9 +59,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Was not authenticated to return the database status"
           }
         }
       }

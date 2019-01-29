@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_28_103927) do
+ActiveRecord::Schema.define(version: 2019_01_29_091428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,8 @@ ActiveRecord::Schema.define(version: 2019_01_28_103927) do
     t.bigint "staff_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["offender_id"], name: "index_allocations_on_offender_id"
+    t.index ["offender_no"], name: "index_allocations_on_offender_no"
     t.index ["staff_id"], name: "index_allocations_on_staff_id"
   end
 
@@ -36,6 +38,7 @@ ActiveRecord::Schema.define(version: 2019_01_28_103927) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["staff_id"], name: "index_staff_on_staff_id"
   end
 
   add_foreign_key "allocations", "staff"
