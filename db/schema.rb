@@ -10,9 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2019_01_28_103927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "allocations", force: :cascade do |t|
+    t.string "offender_no"
+    t.string "offender_id"
+    t.string "prison"
+    t.string "allocated_at_tier"
+    t.string "reason"
+    t.string "note"
+    t.string "created_by"
+    t.boolean "active"
+    t.bigint "staff_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["staff_id"], name: "index_allocations_on_staff_id"
+  end
+
+  create_table "staff", force: :cascade do |t|
+    t.string "staff_id"
+    t.string "working_pattern"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "allocations", "staff"
 end
