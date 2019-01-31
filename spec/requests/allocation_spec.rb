@@ -43,7 +43,7 @@ describe 'POST /allocation', type: :request do
             allocated_at_tier: { type: :string },
             prison: { type: :string },
             created_by: { type: :string },
-            reason: { type: :string },
+            override_reason: { type: :string },
             note: { type: :string },
             email: { type: :string }
           },
@@ -65,7 +65,7 @@ describe 'POST /allocation', type: :request do
             created_by: 'Fred',
             allocated_at_tier: 'A',
             note: 'A comment',
-            reason: ' ',
+            override_reason: ' ',
             email: 'test@example.com'
           }
         }
