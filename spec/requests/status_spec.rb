@@ -5,7 +5,7 @@ describe 'GET /status', type: :request do
     get 'Gets database status' do
       tags 'System'
       produces 'application/json'
-      security [Bearer: {}]
+      security [Bearer: '']
 
       response '200', 'Successfully returned the database status' do
         examples 'application/json' => {
