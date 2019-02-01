@@ -25,9 +25,18 @@ RSpec.configure do |config|
   end
 
   config.before(:each, :expect_exception) do
-    DatabaseCleaner.strategy = :transaction
     Rails.configuration.sentry_dsn = 'https://test.com'
     allow(Raven).to receive(:capture_exception)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 
   config.after(:each, :epect_exception) do
