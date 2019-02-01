@@ -5,4 +5,8 @@ class StaffService
       s.status = s.status || 'inactive'
     }
   end
+
+  def self.get_poms(staff_ids)
+    Staff.where(staff_id: staff_ids)
+  end
 end
