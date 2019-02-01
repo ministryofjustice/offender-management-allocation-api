@@ -7,7 +7,7 @@ class PomsController < ApplicationController
 
     render(
       json: {
-        'poms' => response
+        'poms' => response.as_json(include: [:allocations])
       }
     )
   end

@@ -7,6 +7,6 @@ class StaffService
   end
 
   def self.get_poms(staff_ids)
-    Staff.where(staff_id: staff_ids)
+    Staff.includes(:allocations).where(staff_id: staff_ids)
   end
 end

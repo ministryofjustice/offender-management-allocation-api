@@ -2,9 +2,10 @@ require 'swagger_helper'
 
 describe 'GET /poms', type: :request do
   before do
-    Staff.create!(staff_id: '1', working_pattern: '0.5', status: 'active')
+    staff_one = Staff.create!(staff_id: '1', working_pattern: '0.5', status: 'active')
     Staff.create(staff_id: '2', working_pattern: '0.5', status: 'active')
     Staff.create(staff_id: '3', working_pattern: '0.5', status: 'active')
+    staff_one.allocations.create!(offender_id: 'AB1234BC', offender_no: '12345', allocated_at_tier: 'B', prison: 'LEI', created_by: 'Frank', staff_id: '1', active: true)
   end
 
   path '/poms/1,2,3' do
@@ -19,6 +20,19 @@ describe 'GET /poms', type: :request do
         run_test! do |response|
           json = JSON.parse(response.body)
           expect(json['poms'].length).to eq(3)
+          expect(json['poms'].first['allocations'].length).to eq(1)
+          expect(json['poms'].first['allocations'].first).to include(
+            "id" => 1,
+            "offender_no" => "12345",
+            "offender_id" => "AB1234BC",
+            "prison" => "LEI",
+            "allocated_at_tier" => "B",
+            "reason" => nil,
+            "note" => nil,
+            "created_by" => "Frank",
+            "active" => true,
+            "staff_id" => 1
+          )
         end
       end
     end
