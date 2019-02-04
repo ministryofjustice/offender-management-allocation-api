@@ -5,6 +5,43 @@
     "version": "v1"
   },
   "paths": {
+    "/health": {
+      "get": {
+        "summary": "Gets system health",
+        "tags": [
+          "System"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned the system health"
+          }
+        }
+      }
+    },
+    "/poms/id=1&id=2&id=3": {
+      "get": {
+        "summary": "Prisoner Offender Managers by multiple ID",
+        "tags": [
+          "Allocation"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets a list of Prisoner Offender Managers"
+          }
+        }
+      }
+    },
     "/allocation/active": {
       "post": {
         "summary": "Obtains active allocation for provided offender id(s)",
@@ -54,8 +91,8 @@
                     "created_by": "Frank",
                     "active": true,
                     "prison_offender_manager_id": 1,
-                    "created_at": "2019-02-04T14:40:29.069Z",
-                    "updated_at": "2019-02-04T14:40:29.069Z",
+                    "created_at": "2019-02-04T15:07:25.166Z",
+                    "updated_at": "2019-02-04T15:07:25.166Z",
                     "nomis_staff_id": 1
                   },
                   "AB1234DD": {
@@ -69,8 +106,8 @@
                     "created_by": "Frank",
                     "active": true,
                     "prison_offender_manager_id": 2,
-                    "created_at": "2019-02-04T14:40:29.072Z",
-                    "updated_at": "2019-02-04T14:40:29.072Z",
+                    "created_at": "2019-02-04T15:07:25.170Z",
+                    "updated_at": "2019-02-04T15:07:25.170Z",
                     "nomis_staff_id": 2
                   }
                 }
@@ -173,43 +210,6 @@
         }
       }
     },
-    "/health": {
-      "get": {
-        "summary": "Gets system health",
-        "tags": [
-          "System"
-        ],
-        "produces": [
-          "text/plain"
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully returned the system health"
-          }
-        }
-      }
-    },
-    "/poms/id=1&id=2&id=3": {
-      "get": {
-        "summary": "Prisoner Offender Managers by multiple ID",
-        "tags": [
-          "Allocation"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "security": [
-          {
-            "Bearer": ""
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Gets a list of Prisoner Offender Managers"
-          }
-        }
-      }
-    },
     "/status": {
       "get": {
         "summary": "Gets database status",
@@ -225,6 +225,9 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Was not authenticated to return the database status"
+          },
           "200": {
             "description": "Successfully returned the database status",
             "examples": {
@@ -244,9 +247,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Was not authenticated to return the database status"
           }
         }
       }
