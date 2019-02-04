@@ -45,7 +45,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "staff_id": {
+                "nomis_staff_id": {
                   "type": "string"
                 },
                 "offender_no": {
@@ -74,7 +74,7 @@
                 }
               },
               "required": [
-                "staff_id",
+                "nomis_staff_id",
                 "offender_no",
                 "offender_id",
                 "prison",
@@ -85,7 +85,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Creates a new allocation, inactivating any previous allocations for the offender",
+            "description": "Creates a new allocation, deactivating any previous allocations for the offender",
             "examples": {
               "application/json": {
                 "status": "ok",
@@ -109,6 +109,7 @@
           }
         }
       }
+<<<<<<< HEAD
     },
     "/poms/id=1&id=2&id=3": {
       "get": {
@@ -171,6 +172,8 @@
           }
         }
       }
+=======
+>>>>>>> Amend render_error message
     }
   },
   "securityDefinitions": {
