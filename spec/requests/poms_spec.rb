@@ -27,9 +27,9 @@ describe 'GET /poms', type: :request do
 
         run_test! do |response|
           json = JSON.parse(response.body)
-          expect(json['poms'].length).to eq(3)
-          expect(json['poms'].first['allocations'].length).to eq(1)
-          expect(json['poms'].first['allocations'].first).to include(
+          expect(json['data'].length).to eq(3)
+          expect(json['data'].first['allocations'].length).to eq(1)
+          expect(json['data'].first['allocations'].first).to include(
             "id" => 1,
             "offender_no" => "12345",
             "offender_id" => "AB1234BC",
