@@ -1,6 +1,13 @@
 require 'swagger_helper'
 
 describe 'POST /allocation', type: :request do
+  before do
+    staff_one = PrisonOffenderManager.create!(nomis_staff_id: '1', working_pattern: '0.5', status: 'active')
+    PrisonOffenderManager.create(nomis_staff_id: '2', working_pattern: '0.5', status: 'active')
+    PrisonOffenderManager.create(nomis_staff_id: '3', working_pattern: '0.5', status: 'active')
+    staff_one.allocations.create!(offender_id: 'AB1234BC', offender_no: '12345', allocated_at_tier: 'B', prison: 'LEI', created_by: 'Frank', nomis_staff_id: '1', active: true)
+  end
+
   path '/allocation' do
     post 'Creates a new allocation' do
       tags 'Allocation'
@@ -70,8 +77,9 @@ describe 'POST /allocation', type: :request do
           expect(json['status']).to eq('ok')
           expect(json['errorMessage']).to eq('')
 
-          expect(Allocation.count).to eq(1)
-          expect(Allocation.first.offender_id).to eq('A1A')
+          expect(Allocation.count).to eq(2)
+          expect(Allocation.where(offender_id: 'A1A').first).not_to be_nil
+          expect(Allocation.where(offender_id: 'A1A').first.nomis_staff_id).to eq(1)
         end
       end
 

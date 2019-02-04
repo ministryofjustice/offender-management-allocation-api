@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   get('health' => 'health#index')
 
   post('allocation' => 'allocation#create')
+  post('allocation/active' => 'allocation#active')
 end
