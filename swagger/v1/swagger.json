@@ -5,18 +5,43 @@
     "version": "v1"
   },
   "paths": {
-    "/health": {
+    "/status": {
       "get": {
-        "summary": "Gets system health",
+        "summary": "Gets database status",
         "tags": [
           "System"
         ],
         "produces": [
-          "text/plain"
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": ""
+          }
         ],
         "responses": {
           "200": {
-            "description": "Successfully returned the system health"
+            "description": "Successfully returned the database status",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "postgresVersion": "PostgresSQL 10.0"
+              }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "postgresVersion": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Was not authenticated to return the database status"
           }
         }
       }
@@ -38,6 +63,22 @@
         "responses": {
           "200": {
             "description": "Gets a list of Prisoner Offender Managers"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Gets system health",
+        "tags": [
+          "System"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned the system health"
           }
         }
       }
@@ -105,9 +146,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Must be authenticated to create an allocation"
-          },
           "200": {
             "description": "Generatesap an error with missing data",
             "schema": {
@@ -127,47 +165,9 @@
                 "errorMessage": "Invalid request"
               }
             }
-          }
-        }
-      }
-    },
-    "/status": {
-      "get": {
-        "summary": "Gets database status",
-        "tags": [
-          "System"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "security": [
-          {
-            "Bearer": ""
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully returned the database status",
-            "examples": {
-              "application/json": {
-                "status": "ok",
-                "postgresVersion": "PostgresSQL 10.0"
-              }
-            },
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string"
-                },
-                "postgresVersion": {
-                  "type": "string"
-                }
-              }
-            }
           },
           "401": {
-            "description": "Was not authenticated to return the database status"
+            "description": "Must be authenticated to create an allocation"
           }
         }
       }

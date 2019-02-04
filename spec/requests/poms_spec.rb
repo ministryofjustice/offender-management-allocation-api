@@ -39,7 +39,7 @@ describe 'GET /poms', type: :request do
             "note" => nil,
             "created_by" => "Frank",
             "active" => true,
-            "nomis_staff_id" => "1"
+            "nomis_staff_id" => 1
           )
         end
       end

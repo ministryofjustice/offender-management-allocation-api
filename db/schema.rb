@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_01_153452) do
+ActiveRecord::Schema.define(version: 2019_02_04_123001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,15 +27,15 @@ ActiveRecord::Schema.define(version: 2019_02_01_153452) do
     t.bigint "prison_offender_manager_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "nomis_staff_id"
+    t.integer "nomis_staff_id"
     t.index ["nomis_staff_id"], name: "index_allocations_on_nomis_staff_id"
     t.index ["offender_id"], name: "index_allocations_on_offender_id"
     t.index ["offender_no"], name: "index_allocations_on_offender_no"
   end
 
   create_table "prison_offender_managers", force: :cascade do |t|
-    t.string "nomis_staff_id"
-    t.string "working_pattern"
+    t.integer "nomis_staff_id"
+    t.float "working_pattern"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
