@@ -21,6 +21,27 @@
         }
       }
     },
+    "/poms/id=1&id=2&id=3": {
+      "get": {
+        "summary": "Prisoner Offender Managers by multiple ID",
+        "tags": [
+          "Allocation"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets a list of Prisoner Offender Managers"
+          }
+        }
+      }
+    },
     "/allocation": {
       "post": {
         "summary": "Creates a new allocation",
@@ -45,7 +66,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "staff_id": {
+                "nomis_staff_id": {
                   "type": "string"
                 },
                 "offender_no": {
@@ -74,7 +95,7 @@
                 }
               },
               "required": [
-                "staff_id",
+                "nomis_staff_id",
                 "offender_no",
                 "offender_id",
                 "prison",
@@ -84,14 +105,11 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Must be authenticated to create an allocation"
+          },
           "200": {
-            "description": "Creates a new allocation, inactivating any previous allocations for the offender",
-            "examples": {
-              "application/json": {
-                "status": "ok",
-                "errorMessage": ""
-              }
-            },
+            "description": "Generatesap an error with missing data",
             "schema": {
               "type": "object",
               "properties": {
@@ -102,31 +120,13 @@
                   "type": "string"
                 }
               }
+            },
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "errorMessage": "Invalid request"
+              }
             }
-          },
-          "401": {
-            "description": "Must be authenticated to create an allocation"
-          }
-        }
-      }
-    },
-    "/poms/id=1&id=2&id=3": {
-      "get": {
-        "summary": "Prisoner Offender Managers by multiple ID",
-        "tags": [
-          "Allocation"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "security": [
-          {
-            "Bearer": ""
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Gets a list of Prisoner Offender Managers"
           }
         }
       }

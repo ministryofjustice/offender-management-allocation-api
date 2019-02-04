@@ -15,29 +15,24 @@ describe 'POST /allocation', type: :request do
         end
       end
 
-      response '200', 'Generates an error with missing data' do
+      response '200', 'Generatesap an error with missing data' do
         let(:Authorization) { "Bearer #{generate_jwt_token}" }
-        let(:allocation) { { staff_id: '1' } }
+        let(:allocation) { { allocation: { prison_offender_manager_id: '1' } } }
 
         run_test! do |response|
           json = JSON.parse(response.body)
 
           expect(json['status']).to eq('error')
-          expect(json['errorMessage']).to include('Validation failed:')
-          expect(json['errorMessage']).to include("Offender no can't be blank")
-          expect(json['errorMessage']).to include("Offender can't be blank")
-          expect(json['errorMessage']).to include("Prison can't be blank")
-          expect(json['errorMessage']).to include("Allocated at tier can't be blank")
-          expect(json['errorMessage']).to include("Created by can't be blank")
+          expect(json['errorMessage']).to eq('Invalid request')
         end
       end
 
-      response '200', 'Creates a new allocation, inactivating any previous allocations for the offender' do
+      response '200', 'Creates a new allocation, deactivating any previous allocations for the offender' do
         consumes 'application/json'
         parameter name: :allocation, in: :body, schema: {
           type: :object,
           properties: {
-            staff_id: { type: :string },
+            nomis_staff_id: { type: :string },
             offender_no: { type: :string },
             offender_id: { type: :string },
             allocated_at_tier: { type: :string },
@@ -47,7 +42,7 @@ describe 'POST /allocation', type: :request do
             note: { type: :string },
             email: { type: :string }
           },
-          required: %w[staff_id offender_no offender_id prison note]
+          required: %w[nomis_staff_id offender_no offender_id prison note]
         }
         schema type: :object,
                properties: {
@@ -58,7 +53,7 @@ describe 'POST /allocation', type: :request do
         let(:Authorization) { "Bearer #{generate_jwt_token}" }
         let(:allocation) {
           {
-            staff_id: '1',
+            nomis_staff_id: '1',
             offender_no: '1',
             offender_id: 'A1A',
             prison: 'LEI',
@@ -82,7 +77,7 @@ describe 'POST /allocation', type: :request do
 
       response '401', 'Must be authenticated to create an allocation' do
         let(:Authorization) { '' }
-        let(:allocation) { { staff_id: '1' } }
+        let(:allocation) { { prison_offender_manager_id: '1' } }
 
         run_test!
       end

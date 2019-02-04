@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::API
   include Authorisable
 
-  rescue_from ActiveRecord::RecordInvalid do |e|
-    render_error(e.to_s)
+  rescue_from ActiveRecord::RecordInvalid do
+    render_error
   end
 
   def render_ok
@@ -14,11 +14,11 @@ class ApplicationController < ActionController::API
     )
   end
 
-  def render_error(msg)
+  def render_error
     render(
       json: {
         'status' => 'error',
-        'errorMessage' => msg
+        'errorMessage' => 'Invalid request'
       }
     )
   end

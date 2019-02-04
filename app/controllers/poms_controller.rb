@@ -2,8 +2,8 @@ class PomsController < ApplicationController
   before_action :authorise
 
   def show
-    staff_ids = params.require(:ids).gsub(/[^\d]/, '').split('')
-    response = StaffService.get_poms(staff_ids)
+    nomis_staff_ids = params.require(:ids).gsub(/[^\d]/, '').split('')
+    response = PrisonOffenderManagerService.get_poms(nomis_staff_ids)
 
     render(
       json: {
