@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_29_091428) do
+ActiveRecord::Schema.define(version: 2019_02_01_153452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,22 +24,23 @@ ActiveRecord::Schema.define(version: 2019_01_29_091428) do
     t.string "note"
     t.string "created_by"
     t.boolean "active"
-    t.bigint "staff_id"
+    t.bigint "prison_offender_manager_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "nomis_staff_id"
+    t.index ["nomis_staff_id"], name: "index_allocations_on_nomis_staff_id"
     t.index ["offender_id"], name: "index_allocations_on_offender_id"
     t.index ["offender_no"], name: "index_allocations_on_offender_no"
-    t.index ["staff_id"], name: "index_allocations_on_staff_id"
   end
 
-  create_table "staff", force: :cascade do |t|
-    t.string "staff_id"
+  create_table "prison_offender_managers", force: :cascade do |t|
+    t.string "nomis_staff_id"
     t.string "working_pattern"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["staff_id"], name: "index_staff_on_staff_id"
+    t.index ["nomis_staff_id"], name: "index_prison_offender_managers_on_nomis_staff_id"
   end
 
-  add_foreign_key "allocations", "staff"
+  add_foreign_key "allocations", "prison_offender_managers"
 end
