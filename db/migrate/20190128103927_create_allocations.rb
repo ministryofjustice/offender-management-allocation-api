@@ -11,9 +11,6 @@ class CreateAllocations < ActiveRecord::Migration[5.2]
       t.boolean :active
       t.references :staff, foreign_key: { to_table: :staff }
       t.timestamps
-
-      # t.index :offender_no
-      # t.index :offender_id
     end
   end
 
