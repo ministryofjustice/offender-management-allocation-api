@@ -21,6 +21,27 @@
         }
       }
     },
+    "/poms/id=1&id=2&id=3": {
+      "get": {
+        "summary": "Prisoner Offender Managers by multiple ID",
+        "tags": [
+          "Allocation"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets a list of Prisoner Offender Managers"
+          }
+        }
+      }
+    },
     "/allocation": {
       "post": {
         "summary": "Creates a new allocation",
@@ -84,14 +105,11 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Must be authenticated to create an allocation"
+          },
           "200": {
-            "description": "Creates a new allocation, deactivating any previous allocations for the offender",
-            "examples": {
-              "application/json": {
-                "status": "ok",
-                "errorMessage": ""
-              }
-            },
+            "description": "Generatesap an error with missing data",
             "schema": {
               "type": "object",
               "properties": {
@@ -102,32 +120,13 @@
                   "type": "string"
                 }
               }
+            },
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "errorMessage": "Invalid request"
+              }
             }
-          },
-          "401": {
-            "description": "Must be authenticated to create an allocation"
-          }
-        }
-      }
-<<<<<<< HEAD
-    },
-    "/poms/id=1&id=2&id=3": {
-      "get": {
-        "summary": "Prisoner Offender Managers by multiple ID",
-        "tags": [
-          "Allocation"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "security": [
-          {
-            "Bearer": ""
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Gets a list of Prisoner Offender Managers"
           }
         }
       }
@@ -172,8 +171,6 @@
           }
         }
       }
-=======
->>>>>>> Amend render_error message
     }
   },
   "securityDefinitions": {

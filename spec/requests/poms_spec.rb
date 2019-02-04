@@ -2,10 +2,18 @@ require 'swagger_helper'
 
 describe 'GET /poms', type: :request do
   before do
-    staff_one = Staff.create!(staff_id: '1', working_pattern: '0.5', status: 'active')
-    Staff.create(staff_id: '2', working_pattern: '0.5', status: 'active')
-    Staff.create(staff_id: '3', working_pattern: '0.5', status: 'active')
-    staff_one.allocations.create!(offender_id: 'AB1234BC', offender_no: '12345', allocated_at_tier: 'B', prison: 'LEI', created_by: 'Frank', staff_id: '1', active: true)
+    staff_one = PrisonOffenderManager.create!(nomis_staff_id: '1', working_pattern: '0.5', status: 'active')
+    PrisonOffenderManager.create(nomis_staff_id: '2', working_pattern: '0.5', status: 'active')
+    PrisonOffenderManager.create(nomis_staff_id: '3', working_pattern: '0.5', status: 'active')
+    staff_one.allocations.create!(
+      offender_id: 'AB1234BC',
+      offender_no: '12345',
+      allocated_at_tier: 'B',
+      prison: 'LEI',
+      created_by: 'Frank',
+      nomis_staff_id: '1',
+      active: true
+    )
   end
 
   path '/poms/id=1&id=2&id=3' do
@@ -31,7 +39,7 @@ describe 'GET /poms', type: :request do
             "note" => nil,
             "created_by" => "Frank",
             "active" => true,
-            "staff_id" => 1
+            "nomis_staff_id" => "1"
           )
         end
       end

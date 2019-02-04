@@ -5,4 +5,8 @@ class PrisonOffenderManagerService
       s.status = s.status || 'inactive'
     }
   end
+
+  def self.get_poms(nomis_staff_ids)
+    PrisonOffenderManager.includes(:allocations).where(nomis_staff_id: nomis_staff_ids)
+  end
 end
