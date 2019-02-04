@@ -7,5 +7,4 @@ RSpec.describe Allocation, type: :model do
   it { is_expected.to validate_presence_of(:prison) }
   it { is_expected.to validate_presence_of(:allocated_at_tier) }
   it { is_expected.to validate_presence_of(:created_by) }
-  it { is_expected.to validate_presence_of(:active) }
 end

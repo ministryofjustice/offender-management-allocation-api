@@ -10,4 +10,13 @@ class AllocationService
       }
     end
   end
+
+  def self.active_allocations(offender_ids)
+    Allocation.where(offender_id: offender_ids, active: true).map { |a|
+      [
+        a[:offender_id],
+        a
+      ]
+    }.to_h
+  end
 end

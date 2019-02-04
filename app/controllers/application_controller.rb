@@ -5,11 +5,12 @@ class ApplicationController < ActionController::API
     render_error
   end
 
-  def render_ok
+  def render_ok(data = nil)
     render(
       json: {
         'status' => 'ok',
-        'errorMessage' => ''
+        'errorMessage' => '',
+        'data' => data
       }
     )
   end
