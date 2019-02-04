@@ -2,7 +2,7 @@ class PomsController < ApplicationController
   before_action :authorise
 
   def show
-    staff_ids = params[:ids].split(',')
+    staff_ids = params.require(:ids).gsub(/[^\d]/, '').split('')
     response = StaffService.get_poms(staff_ids)
 
     render(

@@ -8,7 +8,7 @@ describe 'GET /poms', type: :request do
     staff_one.allocations.create!(offender_id: 'AB1234BC', offender_no: '12345', allocated_at_tier: 'B', prison: 'LEI', created_by: 'Frank', staff_id: '1', active: true)
   end
 
-  path '/poms/1,2,3' do
+  path '/poms/id=1&id=2&id=3' do
     get 'Prisoner Offender Managers by multiple ID' do
       tags 'Allocation'
       produces 'application/json'
