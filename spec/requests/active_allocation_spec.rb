@@ -10,40 +10,6 @@ describe 'POST /allocation', type: :request do
   end
 
   path '/allocation/active' do
-    get 'Obtains active allocation for provided offender id(s)' do
-      tags 'Allocation'
-      produces 'application/json'
-      security [Bearer: '']
-      parameter name: :ids, in: :query, type: :array, required: :id
-
-      after do |example|
-        # Generate an example for the swagger document if there is a response from
-        # the server that can be parsed as json.
-        if response.body.present?
-          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
-        end
-      end
-
-      response '200', 'Returns active allocations for provided offender ids' do
-        let(:Authorization) { "Bearer #{generate_jwt_token}" }
-        let(:ids) { %w[AB1234BC AB1234DD] }
-
-        run_test! do |response|
-          json = JSON.parse(response.body)
-          expect(json['status']).to eq('ok')
-          expect(json['data']['AB1234BC']['nomis_staff_id']).to eq(1)
-          expect(json['data']['AB1234DD']['nomis_staff_id']).to eq(2)
-        end
-      end
-
-      response '401', 'Must be authenticated to create an allocation' do
-        let(:Authorization) { '' }
-        let(:ids) { %w[AB1234BC AB1234DD] }
-
-        run_test!
-      end
-    end
-
     post 'Obtains active allocation for provided offender id(s)' do
       tags 'Allocation'
       produces 'application/json'

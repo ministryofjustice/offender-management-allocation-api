@@ -21,8 +21,6 @@ private
   end
 
   def active_allocation_params
-    return params.require(:ids).split(',') if request.method == 'GET'
-
     params.require(:_json)
   end
 end
