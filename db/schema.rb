@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_04_123001) do
+ActiveRecord::Schema.define(version: 2019_02_05_104220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "allocations", force: :cascade do |t|
-    t.string "offender_no"
-    t.string "offender_id"
+    t.string "nomis_offender_id"
     t.string "prison"
     t.string "allocated_at_tier"
     t.string "reason"
@@ -28,9 +27,9 @@ ActiveRecord::Schema.define(version: 2019_02_04_123001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "nomis_staff_id"
+    t.integer "nomis_booking_id"
+    t.index ["nomis_offender_id"], name: "index_allocations_on_nomis_offender_id"
     t.index ["nomis_staff_id"], name: "index_allocations_on_nomis_staff_id"
-    t.index ["offender_id"], name: "index_allocations_on_offender_id"
-    t.index ["offender_no"], name: "index_allocations_on_offender_no"
   end
 
   create_table "prison_offender_managers", force: :cascade do |t|
