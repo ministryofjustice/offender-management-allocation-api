@@ -33,18 +33,22 @@ PrisonOffenderManager.create!(
   working_pattern: 1
 )
 
-Allocation.create!(
-  nomis_offender_id: 'G4273GI',
-  nomis_booking_id: 1153753,
-  prison: 'LEI',
-  allocated_at_tier: 'C',
-  created_by: 'user@username.com'
-)
+AllocationService.create_allocation(
+  {
+    nomis_offender_id: 'G4273GI',
+    nomis_booking_id: 1153753,
+    prison: 'LEI',
+    allocated_at_tier: 'C',
+    created_by: 'user@username.com',
+    nomis_staff_id: 485595
+  })
 
-Allocation.create!(
-  nomis_offender_id: 'G4273GI',
-  nomis_booking_id: 1153753,
-  prison: 'LEI',
-  allocated_at_tier: 'A',
-  created_by: 'user@username.com'
-)
+AllocationService.create_allocation(
+  {
+    nomis_offender_id: 'G4273GI',
+    nomis_booking_id: 1153753,
+    prison: 'LEI',
+    allocated_at_tier: 'A',
+    created_by: 'user@username.com',
+    nomis_staff_id: 485595
+  })
