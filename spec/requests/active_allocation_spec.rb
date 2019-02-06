@@ -6,7 +6,7 @@ describe 'POST /allocation', type: :request do
     staff_two = PrisonOffenderManager.create(nomis_staff_id: 2, working_pattern: 0.5, status: 'active')
     staff_one.allocations.create!(
       nomis_offender_id: 'AB1234BC',
-      nomis_booking_id: 12345,
+      nomis_booking_id: 12_345,
       allocated_at_tier: 'B',
       prison: 'LEI',
       created_by: 'Frank',
@@ -15,7 +15,7 @@ describe 'POST /allocation', type: :request do
     )
     staff_two.allocations.create!(
       nomis_offender_id: 'AB1234DD',
-      nomis_booking_id: 12346,
+      nomis_booking_id: 12_346,
       allocated_at_tier: 'C',
       prison: 'LEI',
       created_by: 'Frank',
@@ -24,7 +24,7 @@ describe 'POST /allocation', type: :request do
     )
     staff_two.allocations.create!(
       nomis_offender_id: 'AB1234BC',
-      nomis_booking_id: 12347,
+      nomis_booking_id: 12_347,
       allocated_at_tier: 'B',
       prison: 'LEI',
       created_by: 'Frank',

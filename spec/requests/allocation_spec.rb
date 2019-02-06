@@ -7,7 +7,7 @@ describe 'POST /allocation', type: :request do
     PrisonOffenderManager.create!(nomis_staff_id: 3, working_pattern: 0.5, status: 'active')
     staff_one.allocations.create!(
       nomis_offender_id: 'AB1234BC',
-      nomis_booking_id: 123456,
+      nomis_booking_id: 123_456,
       allocated_at_tier: 'B',
       prison: 'LEI',
       created_by: 'Frank',
@@ -26,12 +26,12 @@ describe 'POST /allocation', type: :request do
         # Generate an example for the swagger document if there is a response from
         # the server that can be parsed as json.
         if response.body.present?
-          example.metadata[:response][:examples] = {'application/json' => JSON.parse(response.body, symbolize_names: true)}
+          example.metadata[:response][:examples] = { 'application/json' => JSON.parse(response.body, symbolize_names: true) }
         end
       end
 
       response '200', 'Generates an error with missing data' do
-        let(:Authorization) {"Bearer #{ generate_jwt_token }"}
+        let(:Authorization) { "Bearer #{generate_jwt_token}" }
         let(:allocation) { { allocation: { prison_offender_manager_id: '1' } } }
 
         run_test! do |response|
@@ -71,7 +71,7 @@ describe 'POST /allocation', type: :request do
           {
             nomis_staff_id: 1,
             nomis_offender_id: nomis_offender_id,
-            nomis_booking_id: 1153753,
+            nomis_booking_id: 1_153_753,
             prison: 'LEI',
             created_by: 'Fred',
             allocated_at_tier: 'A',
@@ -86,7 +86,6 @@ describe 'POST /allocation', type: :request do
 
           expect(json['status']).to eq('ok')
           expect(json['errorMessage']).to eq('')
-
 
           expect(Allocation.count).to eq(2)
           expect(Allocation.where(nomis_offender_id: nomis_offender_id).first).not_to be_nil

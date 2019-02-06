@@ -36,9 +36,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Must be authenticated to create an allocation"
-          },
           "200": {
             "description": "Returns active allocations for provided offender ids",
             "examples": {
@@ -56,8 +53,8 @@
                     "created_by": "Frank",
                     "active": true,
                     "prison_offender_manager_id": 1,
-                    "created_at": "2019-02-06T09:13:39.306Z",
-                    "updated_at": "2019-02-06T09:13:39.306Z",
+                    "created_at": "2019-02-06T09:22:18.684Z",
+                    "updated_at": "2019-02-06T09:22:18.684Z",
                     "nomis_staff_id": 1,
                     "nomis_booking_id": 12345
                   },
@@ -71,14 +68,58 @@
                     "created_by": "Frank",
                     "active": true,
                     "prison_offender_manager_id": 2,
-                    "created_at": "2019-02-06T09:13:39.310Z",
-                    "updated_at": "2019-02-06T09:13:39.310Z",
+                    "created_at": "2019-02-06T09:22:18.687Z",
+                    "updated_at": "2019-02-06T09:22:18.687Z",
                     "nomis_staff_id": 2,
                     "nomis_booking_id": 12346
                   }
                 }
               }
             }
+          },
+          "401": {
+            "description": "Must be authenticated to create an allocation"
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "Gets database status",
+        "tags": [
+          "System"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned the database status",
+            "examples": {
+              "application/json": {
+                "status": "ok",
+                "postgresVersion": "PostgresSQL 10.0"
+              }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "postgresVersion": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Was not authenticated to return the database status"
           }
         }
       }
@@ -150,14 +191,7 @@
             "description": "Must be authenticated to create an allocation"
           },
           "200": {
-            "description": "Creates a new allocation, deactivating any previous allocations for the offender",
-            "examples": {
-              "application/json": {
-                "status": "ok",
-                "errorMessage": "",
-                "data": null
-              }
-            },
+            "description": "Generates an error with missing data",
             "schema": {
               "type": "object",
               "properties": {
@@ -168,7 +202,30 @@
                   "type": "string"
                 }
               }
+            },
+            "examples": {
+              "application/json": {
+                "status": "error",
+                "errorMessage": "Invalid request",
+                "data": null
+              }
             }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Gets system health",
+        "tags": [
+          "System"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned the system health"
           }
         }
       }
@@ -190,63 +247,6 @@
         "responses": {
           "200": {
             "description": "Gets a list of Prisoner Offender Managers"
-          }
-        }
-      }
-    },
-    "/health": {
-      "get": {
-        "summary": "Gets system health",
-        "tags": [
-          "System"
-        ],
-        "produces": [
-          "text/plain"
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully returned the system health"
-          }
-        }
-      }
-    },
-    "/status": {
-      "get": {
-        "summary": "Gets database status",
-        "tags": [
-          "System"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "security": [
-          {
-            "Bearer": ""
-          }
-        ],
-        "responses": {
-          "401": {
-            "description": "Was not authenticated to return the database status"
-          },
-          "200": {
-            "description": "Successfully returned the database status",
-            "examples": {
-              "application/json": {
-                "status": "ok",
-                "postgresVersion": "PostgresSQL 10.0"
-              }
-            },
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string"
-                },
-                "postgresVersion": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }

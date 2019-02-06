@@ -45,7 +45,7 @@ describe 'GET /poms', type: :request do
             'created_by' => author,
             'active' => true,
             'nomis_staff_id' => 1
-          ) 
+          )
         end
       end
     end
