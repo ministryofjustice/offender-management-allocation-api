@@ -1,7 +1,7 @@
 class AllocationService
   def self.create_allocation(params)
     Allocation.transaction do
-      Allocation.where(offender_no: params[:offender_no]).update_all(active: false)
+      Allocation.where(nomis_offender_id: params[:nomis_offender_id]).update_all(active: false)
       Allocation.create!(params) { |alloc|
         alloc.prison_offender_manager = PrisonOffenderManagerService.
           get_prison_offender_manager(params[:nomis_staff_id])
@@ -11,10 +11,10 @@ class AllocationService
     end
   end
 
-  def self.active_allocations(offender_ids)
-    Allocation.where(offender_id: offender_ids, active: true).map { |a|
+  def self.active_allocations(nomis_offender_ids)
+    Allocation.where(nomis_offender_id: nomis_offender_ids, active: true).map { |a|
       [
-        a[:offender_id],
+        a[:nomis_offender_id],
         a
       ]
     }.to_h

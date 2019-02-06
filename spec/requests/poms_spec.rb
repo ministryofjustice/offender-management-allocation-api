@@ -1,17 +1,22 @@
 require 'swagger_helper'
 
 describe 'GET /poms', type: :request do
+  let(:nomis_offender_id) { 'AB1234BC' }
+  let(:nomis_booking_id) { 1_153_753 }
+  let(:tier) { 'B' }
+  let(:author) { 'Frank' }
+
   before do
-    staff_one = PrisonOffenderManager.create!(nomis_staff_id: '1', working_pattern: '0.5', status: 'active')
-    PrisonOffenderManager.create(nomis_staff_id: '2', working_pattern: '0.5', status: 'active')
-    PrisonOffenderManager.create(nomis_staff_id: '3', working_pattern: '0.5', status: 'active')
+    staff_one = PrisonOffenderManager.create!(nomis_staff_id: 1, working_pattern: '0.5', status: 'active')
+    PrisonOffenderManager.create(nomis_staff_id: 1, working_pattern: '0.5', status: 'active')
+    PrisonOffenderManager.create(nomis_staff_id: 3, working_pattern: '0.5', status: 'active')
     staff_one.allocations.create!(
-      offender_id: 'AB1234BC',
-      offender_no: '12345',
-      allocated_at_tier: 'B',
+      nomis_offender_id: nomis_offender_id,
+      nomis_booking_id: nomis_booking_id,
+      allocated_at_tier: tier,
       prison: 'LEI',
-      created_by: 'Frank',
-      nomis_staff_id: '1',
+      created_by: author,
+      nomis_staff_id: 1,
       active: true
     )
   end
@@ -30,17 +35,17 @@ describe 'GET /poms', type: :request do
           expect(json['data'].length).to eq(3)
           expect(json['data'].first['allocations'].length).to eq(1)
           expect(json['data'].first['allocations'].first).to include(
-            "id" => 1,
-            "offender_no" => "12345",
-            "offender_id" => "AB1234BC",
-            "prison" => "LEI",
-            "allocated_at_tier" => "B",
-            "reason" => nil,
-            "note" => nil,
-            "created_by" => "Frank",
-            "active" => true,
-            "nomis_staff_id" => 1
-          )
+            'id' => 1,
+            'nomis_booking_id' => nomis_booking_id,
+            'nomis_offender_id' => nomis_offender_id,
+            'prison' => 'LEI',
+            'allocated_at_tier' => tier,
+            'reason' => nil,
+            'note' => nil,
+            'created_by' => author,
+            'active' => true,
+            'nomis_staff_id' => 1
+          ) 
         end
       end
     end

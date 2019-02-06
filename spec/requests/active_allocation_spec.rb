@@ -2,11 +2,35 @@ require 'swagger_helper'
 
 describe 'POST /allocation', type: :request do
   before do
-    staff_one = PrisonOffenderManager.create!(nomis_staff_id: '1', working_pattern: '0.5', status: 'active')
-    staff_two = PrisonOffenderManager.create(nomis_staff_id: '2', working_pattern: '0.5', status: 'active')
-    staff_one.allocations.create!(offender_id: 'AB1234BC', offender_no: '12345', allocated_at_tier: 'B', prison: 'LEI', created_by: 'Frank', nomis_staff_id: '1', active: true)
-    staff_two.allocations.create!(offender_id: 'AB1234DD', offender_no: '12346', allocated_at_tier: 'C', prison: 'LEI', created_by: 'Frank', nomis_staff_id: '2', active: true)
-    staff_two.allocations.create!(offender_id: 'AB1234BC', offender_no: '12345', allocated_at_tier: 'B', prison: 'LEI', created_by: 'Frank', nomis_staff_id: '1', active: false)
+    staff_one = PrisonOffenderManager.create!(nomis_staff_id: 1, working_pattern: 0.5, status: 'active')
+    staff_two = PrisonOffenderManager.create(nomis_staff_id: 2, working_pattern: 0.5, status: 'active')
+    staff_one.allocations.create!(
+      nomis_offender_id: 'AB1234BC',
+      nomis_booking_id: 12345,
+      allocated_at_tier: 'B',
+      prison: 'LEI',
+      created_by: 'Frank',
+      nomis_staff_id: 1,
+      active: true
+    )
+    staff_two.allocations.create!(
+      nomis_offender_id: 'AB1234DD',
+      nomis_booking_id: 12346,
+      allocated_at_tier: 'C',
+      prison: 'LEI',
+      created_by: 'Frank',
+      nomis_staff_id: 2,
+      active: true
+    )
+    staff_two.allocations.create!(
+      nomis_offender_id: 'AB1234BC',
+      nomis_booking_id: 12347,
+      allocated_at_tier: 'B',
+      prison: 'LEI',
+      created_by: 'Frank',
+      nomis_staff_id: 1,
+      active: false
+    )
   end
 
   path '/allocation/active' do

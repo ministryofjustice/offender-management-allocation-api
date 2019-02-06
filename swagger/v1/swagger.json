@@ -5,43 +5,6 @@
     "version": "v1"
   },
   "paths": {
-    "/health": {
-      "get": {
-        "summary": "Gets system health",
-        "tags": [
-          "System"
-        ],
-        "produces": [
-          "text/plain"
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully returned the system health"
-          }
-        }
-      }
-    },
-    "/poms/id=1&id=2&id=3": {
-      "get": {
-        "summary": "Prisoner Offender Managers by multiple ID",
-        "tags": [
-          "Allocation"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "security": [
-          {
-            "Bearer": ""
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Gets a list of Prisoner Offender Managers"
-          }
-        }
-      }
-    },
     "/allocation/active": {
       "post": {
         "summary": "Obtains active allocation for provided offender id(s)",
@@ -73,6 +36,9 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Must be authenticated to create an allocation"
+          },
           "200": {
             "description": "Returns active allocations for provided offender ids",
             "examples": {
@@ -82,8 +48,7 @@
                 "data": {
                   "AB1234BC": {
                     "id": 1,
-                    "offender_no": "12345",
-                    "offender_id": "AB1234BC",
+                    "nomis_offender_id": "AB1234BC",
                     "prison": "LEI",
                     "allocated_at_tier": "B",
                     "reason": null,
@@ -91,14 +56,14 @@
                     "created_by": "Frank",
                     "active": true,
                     "prison_offender_manager_id": 1,
-                    "created_at": "2019-02-04T15:07:25.166Z",
-                    "updated_at": "2019-02-04T15:07:25.166Z",
-                    "nomis_staff_id": 1
+                    "created_at": "2019-02-06T09:13:39.306Z",
+                    "updated_at": "2019-02-06T09:13:39.306Z",
+                    "nomis_staff_id": 1,
+                    "nomis_booking_id": 12345
                   },
                   "AB1234DD": {
                     "id": 2,
-                    "offender_no": "12346",
-                    "offender_id": "AB1234DD",
+                    "nomis_offender_id": "AB1234DD",
                     "prison": "LEI",
                     "allocated_at_tier": "C",
                     "reason": null,
@@ -106,16 +71,14 @@
                     "created_by": "Frank",
                     "active": true,
                     "prison_offender_manager_id": 2,
-                    "created_at": "2019-02-04T15:07:25.170Z",
-                    "updated_at": "2019-02-04T15:07:25.170Z",
-                    "nomis_staff_id": 2
+                    "created_at": "2019-02-06T09:13:39.310Z",
+                    "updated_at": "2019-02-06T09:13:39.310Z",
+                    "nomis_staff_id": 2,
+                    "nomis_booking_id": 12346
                   }
                 }
               }
             }
-          },
-          "401": {
-            "description": "Must be authenticated to create an allocation"
           }
         }
       }
@@ -145,13 +108,13 @@
               "type": "object",
               "properties": {
                 "nomis_staff_id": {
+                  "type": "integer"
+                },
+                "nomis_offender_no": {
                   "type": "string"
                 },
-                "offender_no": {
-                  "type": "string"
-                },
-                "offender_id": {
-                  "type": "string"
+                "nomis_booking_id": {
+                  "type": "integer"
                 },
                 "allocated_at_tier": {
                   "type": "string"
@@ -174,8 +137,8 @@
               },
               "required": [
                 "nomis_staff_id",
-                "offender_no",
-                "offender_id",
+                "nomis_offender_id",
+                "nomis_booking_id",
                 "prison",
                 "note"
               ]
@@ -183,6 +146,9 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Must be authenticated to create an allocation"
+          },
           "200": {
             "description": "Creates a new allocation, deactivating any previous allocations for the offender",
             "examples": {
@@ -203,9 +169,43 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Must be authenticated to create an allocation"
+          }
+        }
+      }
+    },
+    "/poms/id=1&id=2&id=3": {
+      "get": {
+        "summary": "Prisoner Offender Managers by multiple ID",
+        "tags": [
+          "Allocation"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gets a list of Prisoner Offender Managers"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Gets system health",
+        "tags": [
+          "System"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned the system health"
           }
         }
       }
