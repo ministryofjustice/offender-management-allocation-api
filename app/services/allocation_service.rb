@@ -2,10 +2,10 @@ class AllocationService
   def self.create_allocation(params)
     Allocation.transaction do
       Allocation.where(nomis_offender_id: params[:nomis_offender_id]).
-        update_all(active: false)
+      update_all(active: false)
+      params[:prison_offender_manager] = PrisonOffenderManagerService.
+        get_prison_offender_manager(params[:nomis_staff_id])
       Allocation.create!(params) { |alloc|
-        alloc.prison_offender_manager = PrisonOffenderManagerService.
-          get_prison_offender_manager(params[:nomis_staff_id])
         alloc.active = true
         alloc.save!
       }
