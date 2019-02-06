@@ -2,10 +2,18 @@ require 'swagger_helper'
 
 describe 'POST /allocation', type: :request do
   before do
-    staff_one = PrisonOffenderManager.create!(nomis_staff_id: '1', working_pattern: '0.5', status: 'active')
-    PrisonOffenderManager.create(nomis_staff_id: '2', working_pattern: '0.5', status: 'active')
-    PrisonOffenderManager.create(nomis_staff_id: '3', working_pattern: '0.5', status: 'active')
-    staff_one.allocations.create!(offender_id: 'AB1234BC', offender_no: '12345', allocated_at_tier: 'B', prison: 'LEI', created_by: 'Frank', nomis_staff_id: '1', active: true)
+    staff_one = PrisonOffenderManager.create!(nomis_staff_id: 1, working_pattern: 0.5, status: 'active')
+    PrisonOffenderManager.create!(nomis_staff_id: 2, working_pattern: 0.5, status: 'active')
+    PrisonOffenderManager.create!(nomis_staff_id: 3, working_pattern: 0.5, status: 'active')
+    staff_one.allocations.create!(
+      nomis_offender_id: 'AB1234BC',
+      nomis_booking_id: 123_456,
+      allocated_at_tier: 'B',
+      prison: 'LEI',
+      created_by: 'Frank',
+      nomis_staff_id: 1,
+      active: true
+    )
   end
 
   path '/allocation' do
@@ -22,7 +30,7 @@ describe 'POST /allocation', type: :request do
         end
       end
 
-      response '200', 'Generatesap an error with missing data' do
+      response '200', 'Generates an error with missing data' do
         let(:Authorization) { "Bearer #{generate_jwt_token}" }
         let(:allocation) { { allocation: { prison_offender_manager_id: '1' } } }
 
@@ -39,9 +47,9 @@ describe 'POST /allocation', type: :request do
         parameter name: :allocation, in: :body, schema: {
           type: :object,
           properties: {
-            nomis_staff_id: { type: :string },
-            offender_no: { type: :string },
-            offender_id: { type: :string },
+            nomis_staff_id: { type: :integer },
+            nomis_offender_no: { type: :string },
+            nomis_booking_id: { type: :integer },
             allocated_at_tier: { type: :string },
             prison: { type: :string },
             created_by: { type: :string },
@@ -49,7 +57,7 @@ describe 'POST /allocation', type: :request do
             note: { type: :string },
             email: { type: :string }
           },
-          required: %w[nomis_staff_id offender_no offender_id prison note]
+          required: %w[nomis_staff_id nomis_offender_id nomis_booking_id prison note]
         }
         schema type: :object,
                properties: {
@@ -58,11 +66,12 @@ describe 'POST /allocation', type: :request do
                }
 
         let(:Authorization) { "Bearer #{generate_jwt_token}" }
+        let(:nomis_offender_id) { 'G4273GI' }
         let(:allocation) {
           {
-            nomis_staff_id: '1',
-            offender_no: '1',
-            offender_id: 'A1A',
+            nomis_staff_id: 1,
+            nomis_offender_id: nomis_offender_id,
+            nomis_booking_id: 1_153_753,
             prison: 'LEI',
             created_by: 'Fred',
             allocated_at_tier: 'A',
@@ -71,6 +80,7 @@ describe 'POST /allocation', type: :request do
             email: 'test@example.com'
           }
         }
+
         run_test! do |response|
           json = JSON.parse(response.body)
 
@@ -78,8 +88,8 @@ describe 'POST /allocation', type: :request do
           expect(json['errorMessage']).to eq('')
 
           expect(Allocation.count).to eq(2)
-          expect(Allocation.where(offender_id: 'A1A').first).not_to be_nil
-          expect(Allocation.where(offender_id: 'A1A').first.nomis_staff_id).to eq(1)
+          expect(Allocation.where(nomis_offender_id: nomis_offender_id).first).not_to be_nil
+          expect(Allocation.where(nomis_offender_id: nomis_offender_id).first.nomis_staff_id).to eq(1)
         end
       end
 
